@@ -1,0 +1,209 @@
+# ===========================
+# THEBTN Project .gitignore
+# ===========================
+
+# ----------------------------
+# OS Generated Files
+# ----------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ----------------------------
+# Editor & IDE
+# ----------------------------
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+
+# JetBrains IDEs (WebStorm, IntelliJ, Android Studio)
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Eclipse
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+
+# Vim
+*~
+*.sw[mnpcod]
+*.swp
+*.swo
+
+# ----------------------------
+# Node.js / npm
+# ----------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/
+.yarn/
+.pnp.*
+
+# ----------------------------
+# Angular / Ionic
+# ----------------------------
+/.angular/
+/.ionic/
+/App/www/
+/App/dist/
+/App/.angular/
+/App/.ionic/
+/App/coverage/
+/App/.sourcemaps/
+/App/.versions/
+/App/out-tsc/
+/App/bazel-out/
+/App/tmp/
+*.tmp
+*.tmp.*
+.tmp/
+
+# ----------------------------
+# Capacitor
+# ----------------------------
+/App/platforms/
+/App/plugins/
+
+# ----------------------------
+# Android
+# ----------------------------
+*.apk
+*.aar
+*.ap_
+*.aab
+*.dex
+*.class
+
+# Gradle
+.gradle/
+**/build/
+local.properties
+
+# Android Studio
+captures/
+.externalNativeBuild/
+.cxx/
+*.hprof
+
+# Capacitor Android generated
+/App/android/capacitor-cordova-android-plugins/
+/App/android/app/src/main/assets/public/
+/App/android/app/src/main/assets/capacitor.config.json
+/App/android/app/src/main/assets/capacitor.plugins.json
+/App/android/app/src/main/res/xml/config.xml
+
+# ----------------------------
+# iOS / Xcode
+# ----------------------------
+# Build generated
+DerivedData/
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+*.xcscmblueprint
+*.xcworkspace
+!default.xcworkspace
+
+# CocoaPods
+/App/ios/App/Pods/
+/App/ios/Podfile.lock
+
+# Capacitor iOS generated
+/App/ios/capacitor-cordova-ios-plugins/
+
+# ----------------------------
+# ESP32 / Arduino / PlatformIO
+# ----------------------------
+# PlatformIO
+.pio/
+.pioenvs/
+.piolibdeps/
+.clang_complete
+.gcc-flags.json
+
+# Arduino IDE
+*.elf
+*.hex
+*.bin
+Firmware/**/build/
+Firmware/**/.build/
+
+# Compiled libraries
+*.o
+*.a
+*.so
+*.dylib
+
+# ----------------------------
+# Logs & Temp Files
+# ----------------------------
+*.log
+log.txt
+logs/
+*.cache
+.cache/
+
+# ----------------------------
+# Environment & Secrets
+# ----------------------------
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.keystore
+*.jks
+
+# Firebase
+google-services.json
+GoogleService-Info.plist
+
+# ----------------------------
+# Test & Coverage
+# ----------------------------
+coverage/
+.nyc_output/
+test-results/
+testem.log
+libpeerconnection.log
+
+# ----------------------------
+# Misc
+# ----------------------------
+*.bak
+*.backup
+*.orig
+.sass-cache/
+connect.lock
+typings/

@@ -1,0 +1,144 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      <ion-icon name="gameController" class="title-icon"></ion-icon>
+      THE BTN
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Connection Status Card -->
+  <ion-card class="status-card">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon [name]="isConnected() ? 'bluetooth' : 'bluetoothOutline'" 
+                  [class.connected]="isConnected()"></ion-icon>
+        Bluetooth Status
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      @if (isConnected()) {
+        <div class="connection-status connected">
+          <ion-icon name="checkmarkCircle" color="success"></ion-icon>
+          <span>Connected to <strong>{{ getConnectedDevice()?.name || 'Unknown Device' }}</strong></span>
+        </div>
+        <ion-button expand="block" color="danger" (click)="disconnect()">
+          <ion-icon name="closeCircle" slot="start"></ion-icon>
+          Disconnect
+        </ion-button>
+      } @else {
+        <div class="connection-status disconnected">
+          <ion-icon name="closeCircle" color="medium"></ion-icon>
+          <span>Not connected</span>
+        </div>
+        <ion-button expand="block" (click)="startScan()" [disabled]="isScanning">
+          @if (isScanning) {
+            <ion-spinner name="crescent" slot="start"></ion-spinner>
+            Scanning...
+          } @else {
+            <ion-icon name="search" slot="start"></ion-icon>
+            Scan for Quiz Master
+          }
+        </ion-button>
+        @if (isScanning) {
+          <ion-button expand="block" color="medium" fill="outline" (click)="stopScan()">
+            Stop Scan
+          </ion-button>
+        }
+      }
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Discovered Devices -->
+  @if (discoveredDevices.length > 0 && !isConnected()) {
+    <ion-card class="devices-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="bluetooth"></ion-icon>
+          Discovered Devices
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="full">
+          @for (device of discoveredDevices; track device.deviceId) {
+            <ion-item button (click)="connectToDevice(device)" [disabled]="isConnecting">
+              <ion-icon name="bluetooth" slot="start" color="primary"></ion-icon>
+              <ion-label>
+                <h2>{{ device.name || 'Unknown Device' }}</h2>
+                <p class="device-id">{{ device.deviceId }}</p>
+              </ion-label>
+              @if (isConnecting) {
+                <ion-spinner name="crescent" slot="end"></ion-spinner>
+              } @else {
+                <ion-badge slot="end" color="primary">Connect</ion-badge>
+              }
+            </ion-item>
+          }
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <!-- Button Press Log -->
+  @if (isConnected()) {
+    <ion-card class="log-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="flash"></ion-icon>
+          Button Press Log
+          <ion-chip color="success" class="log-count">
+            {{ buttonPressLog.length }}
+          </ion-chip>
+        </ion-card-title>
+        <ion-button fill="clear" size="small" (click)="clearLog()">
+          <ion-icon name="trash" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-card-header>
+      <ion-card-content>
+        @if (buttonPressLog.length === 0) {
+          <div class="empty-log">
+            <ion-icon name="flash" color="medium"></ion-icon>
+            <p>Waiting for button presses...</p>
+            <p class="hint">Press any connected quiz button to see events here</p>
+          </div>
+        } @else {
+          <ion-list lines="full" class="log-list">
+            @for (event of buttonPressLog; track event.timestamp.getTime()) {
+              <ion-item class="log-item">
+                <div class="log-icon" slot="start">
+                  <ion-icon name="flash" color="warning"></ion-icon>
+                </div>
+                <ion-label>
+                  <h3 class="log-button-id">Button {{ event.buttonId }}</h3>
+                  <p class="log-time">{{ formatTime(event.timestamp) }}</p>
+                </ion-label>
+                <ion-badge slot="end" color="tertiary">{{ event.data }}</ion-badge>
+              </ion-item>
+            }
+          </ion-list>
+        }
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <!-- Help Card when not connected and no devices -->
+  @if (!isConnected() && discoveredDevices.length === 0 && !isScanning) {
+    <ion-card class="help-card">
+      <ion-card-content>
+        <div class="help-content">
+          <ion-icon name="bluetooth" class="help-icon"></ion-icon>
+          <h2>Get Started</h2>
+          <p>1. Make sure your Quiz Master device is powered on</p>
+          <p>2. Enable Bluetooth on your phone</p>
+          <p>3. Tap "Scan for Quiz Master" above</p>
+          <p>4. Connect to your device</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  }
+</ion-content>

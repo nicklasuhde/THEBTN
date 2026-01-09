@@ -1,0 +1,286 @@
+// Custom Variables
+:host {
+  --accent-color: #ff6b35;
+  --success-color: #10dc60;
+  --warning-color: #ffce00;
+}
+
+ion-content {
+  --background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+// Title styling
+.title-icon {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+// Cards
+ion-card {
+  border-radius: 16px;
+  margin: 16px 0;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+  ion-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+
+    ion-card-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+
+      ion-icon {
+        font-size: 1.4rem;
+        color: var(--accent-color);
+
+        &.connected {
+          color: var(--success-color);
+          animation: pulse 2s infinite;
+        }
+      }
+    }
+  }
+
+  ion-card-content {
+    padding-top: 8px;
+  }
+}
+
+// Status Card
+.status-card {
+  .connection-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+
+    ion-icon {
+      font-size: 2rem;
+    }
+
+    span {
+      font-size: 1rem;
+      color: #ccc;
+
+      strong {
+        color: #fff;
+      }
+    }
+
+    &.connected {
+      background: linear-gradient(135deg, rgba(16, 220, 96, 0.2) 0%, rgba(16, 220, 96, 0.05) 100%);
+      border: 1px solid rgba(16, 220, 96, 0.3);
+    }
+
+    &.disconnected {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  ion-button {
+    --border-radius: 12px;
+    margin-top: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+}
+
+// Devices Card
+.devices-card {
+  ion-list {
+    background: transparent;
+    padding: 0;
+  }
+
+  ion-item {
+    --background: rgba(255, 255, 255, 0.03);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --min-height: 70px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+
+    &:hover {
+      --background: rgba(255, 255, 255, 0.08);
+    }
+
+    h2 {
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .device-id {
+      color: #888;
+      font-size: 0.75rem;
+      font-family: 'Courier New', monospace;
+    }
+
+    ion-badge {
+      --padding-start: 12px;
+      --padding-end: 12px;
+      font-weight: 600;
+    }
+  }
+}
+
+// Log Card
+.log-card {
+  ion-card-header {
+    ion-card-title {
+      flex: 1;
+    }
+
+    .log-count {
+      --background: var(--success-color);
+      --color: #000;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    ion-button {
+      --color: #ff6b6b;
+    }
+  }
+
+  .empty-log {
+    text-align: center;
+    padding: 40px 20px;
+
+    ion-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+
+    p {
+      color: #888;
+      margin: 8px 0;
+
+      &.hint {
+        font-size: 0.85rem;
+        color: #666;
+      }
+    }
+  }
+
+  .log-list {
+    background: transparent;
+    max-height: 400px;
+    overflow-y: auto;
+
+    .log-item {
+      --background: transparent;
+      --border-color: rgba(255, 255, 255, 0.05);
+      --padding-start: 8px;
+      --min-height: 60px;
+      animation: slideIn 0.3s ease-out;
+
+      .log-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(255, 206, 0, 0.2) 0%, rgba(255, 107, 53, 0.2) 100%);
+
+        ion-icon {
+          font-size: 1.4rem;
+        }
+      }
+
+      .log-button-id {
+        color: #fff;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      .log-time {
+        color: #888;
+        font-size: 0.8rem;
+        font-family: 'Courier New', monospace;
+      }
+
+      ion-badge {
+        font-family: 'Courier New', monospace;
+        font-size: 0.7rem;
+      }
+    }
+  }
+}
+
+// Help Card
+.help-card {
+  .help-content {
+    text-align: center;
+    padding: 24px 16px;
+
+    .help-icon {
+      font-size: 4rem;
+      color: var(--accent-color);
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+
+    h2 {
+      color: #fff;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    p {
+      color: #aaa;
+      font-size: 0.95rem;
+      margin: 10px 0;
+      text-align: left;
+      padding-left: 20px;
+    }
+  }
+}
+
+// Animations
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Button Styles
+ion-button {
+  --border-radius: 10px;
+  font-weight: 500;
+}
+
+// Spinner styling
+ion-spinner {
+  --color: #fff;
+}

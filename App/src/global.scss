@@ -1,0 +1,174 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * THE BTN - Quiz Button Controller App
+ */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700&display=swap');
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/* Force Dark Mode */
+@import "@ionic/angular/css/palettes/dark.always.css";
+
+/* Custom Theme Variables */
+:root {
+  /* Primary Colors */
+  --ion-color-primary: #ff6b35;
+  --ion-color-primary-rgb: 255, 107, 53;
+  --ion-color-primary-contrast: #000000;
+  --ion-color-primary-contrast-rgb: 0, 0, 0;
+  --ion-color-primary-shade: #e05e2f;
+  --ion-color-primary-tint: #ff7a49;
+
+  /* Secondary Colors */
+  --ion-color-secondary: #00d4ff;
+  --ion-color-secondary-rgb: 0, 212, 255;
+  --ion-color-secondary-contrast: #000000;
+  --ion-color-secondary-contrast-rgb: 0, 0, 0;
+  --ion-color-secondary-shade: #00bbe0;
+  --ion-color-secondary-tint: #1ad8ff;
+
+  /* Tertiary Colors */
+  --ion-color-tertiary: #a855f7;
+  --ion-color-tertiary-rgb: 168, 85, 247;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #944bd9;
+  --ion-color-tertiary-tint: #b166f8;
+
+  /* Success */
+  --ion-color-success: #10dc60;
+  --ion-color-success-rgb: 16, 220, 96;
+  --ion-color-success-contrast: #000000;
+  --ion-color-success-contrast-rgb: 0, 0, 0;
+  --ion-color-success-shade: #0ec254;
+  --ion-color-success-tint: #28e070;
+
+  /* Warning */
+  --ion-color-warning: #ffce00;
+  --ion-color-warning-rgb: 255, 206, 0;
+  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-contrast-rgb: 0, 0, 0;
+  --ion-color-warning-shade: #e0b500;
+  --ion-color-warning-tint: #ffd31a;
+
+  /* Danger */
+  --ion-color-danger: #ff4757;
+  --ion-color-danger-rgb: 255, 71, 87;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #e03e4d;
+  --ion-color-danger-tint: #ff5968;
+
+  /* Dark Theme Background */
+  --ion-background-color: #1a1a2e;
+  --ion-background-color-rgb: 26, 26, 46;
+
+  --ion-text-color: #ffffff;
+  --ion-text-color-rgb: 255, 255, 255;
+
+  /* Toolbar */
+  --ion-toolbar-background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  --ion-toolbar-color: #ffffff;
+
+  /* Item Background */
+  --ion-item-background: transparent;
+
+  /* Card Background */
+  --ion-card-background: rgba(255, 255, 255, 0.05);
+}
+
+/* Typography */
+ion-title,
+ion-card-title,
+h1, h2, h3 {
+  font-family: 'Orbitron', sans-serif !important;
+  letter-spacing: 1px;
+}
+
+body,
+ion-content,
+ion-label,
+ion-item,
+p {
+  font-family: 'Exo 2', sans-serif !important;
+}
+
+/* Toolbar Styling */
+ion-toolbar {
+  --background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+  --border-width: 0;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+}
+
+ion-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  
+  ion-icon {
+    color: var(--ion-color-primary);
+  }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Safe Area Handling */
+ion-content {
+  --padding-top: env(safe-area-inset-top);
+  --padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Button Focus State */
+ion-button:focus {
+  outline: 2px solid var(--ion-color-primary);
+  outline-offset: 2px;
+}
+
+/* Chip Styling */
+ion-chip {
+  --background: rgba(255, 107, 53, 0.2);
+  --color: #ff6b35;
+  font-weight: 600;
+}
+
+/* Badge Styling */
+ion-badge {
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-weight: 600;
+}
