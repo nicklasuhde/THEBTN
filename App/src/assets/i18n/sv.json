@@ -1,0 +1,46 @@
+{
+  "APP": {
+    "TITLE": "THE BTN"
+  },
+  "BLUETOOTH": {
+    "STATUS": "Bluetooth-status",
+    "CONNECTED": "Ansluten till",
+    "NOT_CONNECTED": "Inte ansluten",
+    "DISCONNECT": "Koppla från",
+    "SCANNING": "Söker...",
+    "SCAN_FOR_DEVICE": "Sök efter Quiz Master",
+    "STOP_SCAN": "Avbryt sökning",
+    "DISCOVERED_DEVICES": "Hittade enheter",
+    "UNKNOWN_DEVICE": "Okänd enhet",
+    "CONNECT": "Anslut",
+    "READY": "Bluetooth redo",
+    "ERROR": {
+      "TITLE": "Bluetooth-fel",
+      "INIT_FAILED": "Kunde inte initiera Bluetooth. Kontrollera att Bluetooth är aktiverat och att behörigheter är beviljade.",
+      "SCAN_FAILED": "Sökning misslyckades. Kontrollera Bluetooth-behörigheter.",
+      "CONNECTION_FAILED": "Kunde inte ansluta till enheten.",
+      "CONNECTION_ERROR": "Ett fel uppstod vid anslutning."
+    }
+  },
+  "LOG": {
+    "TITLE": "Knapptryckningslogg",
+    "EMPTY": "Väntar på knapptryckningar...",
+    "HINT": "Tryck på valfri ansluten quizknapp för att se händelser här",
+    "BUTTON": "Knapp"
+  },
+  "HELP": {
+    "TITLE": "Kom igång",
+    "STEP_1": "Se till att din Quiz Master-enhet är påslagen",
+    "STEP_2": "Aktivera Bluetooth på din telefon",
+    "STEP_3": "Tryck på \"Sök efter Quiz Master\" ovan",
+    "STEP_4": "Anslut till din enhet"
+  },
+  "ACTIONS": {
+    "CANCEL": "Avbryt",
+    "TRY_AGAIN": "Försök igen",
+    "OK": "OK"
+  },
+  "LANGUAGE": {
+    "SELECT": "Välj språk"
+  }
+}

@@ -2,8 +2,13 @@
   <ion-toolbar color="primary">
     <ion-title>
       <ion-icon name="gameController" class="title-icon"></ion-icon>
-      THE BTN
+      {{ 'APP.TITLE' | translate }}
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="selectLanguage()">
+        <span class="lang-flag">{{ getCurrentLanguageFlag() }}</span>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -18,36 +23,36 @@
       <ion-card-title>
         <ion-icon [name]="isConnected() ? 'bluetooth' : 'bluetoothOutline'" 
                   [class.connected]="isConnected()"></ion-icon>
-        Bluetooth Status
+        {{ 'BLUETOOTH.STATUS' | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
       @if (isConnected()) {
         <div class="connection-status connected">
           <ion-icon name="checkmarkCircle" color="success"></ion-icon>
-          <span>Connected to <strong>{{ getConnectedDevice()?.name || 'Unknown Device' }}</strong></span>
+          <span>{{ 'BLUETOOTH.CONNECTED' | translate }} <strong>{{ getConnectedDevice()?.name || ('BLUETOOTH.UNKNOWN_DEVICE' | translate) }}</strong></span>
         </div>
         <ion-button expand="block" color="danger" (click)="disconnect()">
           <ion-icon name="closeCircle" slot="start"></ion-icon>
-          Disconnect
+          {{ 'BLUETOOTH.DISCONNECT' | translate }}
         </ion-button>
       } @else {
         <div class="connection-status disconnected">
           <ion-icon name="closeCircle" color="medium"></ion-icon>
-          <span>Not connected</span>
+          <span>{{ 'BLUETOOTH.NOT_CONNECTED' | translate }}</span>
         </div>
         <ion-button expand="block" (click)="startScan()" [disabled]="isScanning">
           @if (isScanning) {
             <ion-spinner name="crescent" slot="start"></ion-spinner>
-            Scanning...
+            {{ 'BLUETOOTH.SCANNING' | translate }}
           } @else {
             <ion-icon name="search" slot="start"></ion-icon>
-            Scan for Quiz Master
+            {{ 'BLUETOOTH.SCAN_FOR_DEVICE' | translate }}
           }
         </ion-button>
         @if (isScanning) {
           <ion-button expand="block" color="medium" fill="outline" (click)="stopScan()">
-            Stop Scan
+            {{ 'BLUETOOTH.STOP_SCAN' | translate }}
           </ion-button>
         }
       }
@@ -60,7 +65,7 @@
       <ion-card-header>
         <ion-card-title>
           <ion-icon name="bluetooth"></ion-icon>
-          Discovered Devices
+          {{ 'BLUETOOTH.DISCOVERED_DEVICES' | translate }}
         </ion-card-title>
       </ion-card-header>
       <ion-card-content>
@@ -69,13 +74,13 @@
             <ion-item button (click)="connectToDevice(device)" [disabled]="isConnecting">
               <ion-icon name="bluetooth" slot="start" color="primary"></ion-icon>
               <ion-label>
-                <h2>{{ device.name || 'Unknown Device' }}</h2>
+                <h2>{{ device.name || ('BLUETOOTH.UNKNOWN_DEVICE' | translate) }}</h2>
                 <p class="device-id">{{ device.deviceId }}</p>
               </ion-label>
               @if (isConnecting) {
                 <ion-spinner name="crescent" slot="end"></ion-spinner>
               } @else {
-                <ion-badge slot="end" color="primary">Connect</ion-badge>
+                <ion-badge slot="end" color="primary">{{ 'BLUETOOTH.CONNECT' | translate }}</ion-badge>
               }
             </ion-item>
           }
@@ -90,7 +95,7 @@
       <ion-card-header>
         <ion-card-title>
           <ion-icon name="flash"></ion-icon>
-          Button Press Log
+          {{ 'LOG.TITLE' | translate }}
           <ion-chip color="success" class="log-count">
             {{ buttonPressLog.length }}
           </ion-chip>
@@ -103,8 +108,8 @@
         @if (buttonPressLog.length === 0) {
           <div class="empty-log">
             <ion-icon name="flash" color="medium"></ion-icon>
-            <p>Waiting for button presses...</p>
-            <p class="hint">Press any connected quiz button to see events here</p>
+            <p>{{ 'LOG.EMPTY' | translate }}</p>
+            <p class="hint">{{ 'LOG.HINT' | translate }}</p>
           </div>
         } @else {
           <ion-list lines="full" class="log-list">
@@ -114,7 +119,7 @@
                   <ion-icon name="flash" color="warning"></ion-icon>
                 </div>
                 <ion-label>
-                  <h3 class="log-button-id">Button {{ event.buttonId }}</h3>
+                  <h3 class="log-button-id">{{ 'LOG.BUTTON' | translate }} {{ event.buttonId }}</h3>
                   <p class="log-time">{{ formatTime(event.timestamp) }}</p>
                 </ion-label>
                 <ion-badge slot="end" color="tertiary">{{ event.data }}</ion-badge>
@@ -132,11 +137,11 @@
       <ion-card-content>
         <div class="help-content">
           <ion-icon name="bluetooth" class="help-icon"></ion-icon>
-          <h2>Get Started</h2>
-          <p>1. Make sure your Quiz Master device is powered on</p>
-          <p>2. Enable Bluetooth on your phone</p>
-          <p>3. Tap "Scan for Quiz Master" above</p>
-          <p>4. Connect to your device</p>
+          <h2>{{ 'HELP.TITLE' | translate }}</h2>
+          <p>1. {{ 'HELP.STEP_1' | translate }}</p>
+          <p>2. {{ 'HELP.STEP_2' | translate }}</p>
+          <p>3. {{ 'HELP.STEP_3' | translate }}</p>
+          <p>4. {{ 'HELP.STEP_4' | translate }}</p>
         </div>
       </ion-card-content>
     </ion-card>

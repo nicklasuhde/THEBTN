@@ -6,6 +6,7 @@ import {
   IonTitle,
   IonContent,
   IonButton,
+  IonButtons,
   IonList,
   IonItem,
   IonLabel,
@@ -20,7 +21,8 @@ import {
   IonRefresher,
   IonRefresherContent,
   AlertController,
-  ToastController
+  ToastController,
+  ActionSheetController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -32,10 +34,13 @@ import {
   closeCircle,
   trash,
   refreshOutline,
-  gameController
+  gameController,
+  globe,
+  language
 } from 'ionicons/icons';
 import { BleDevice } from '@capacitor-community/bluetooth-le';
 import { BleService, ButtonPressEvent } from '../services/ble.service';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
@@ -43,11 +48,13 @@ import { BleService, ButtonPressEvent } from '../services/ble.service';
   styleUrls: ['home.page.scss'],
   imports: [
     CommonModule,
+    TranslatePipe,
     IonHeader,
     IonToolbar,
     IonTitle,
     IonContent,
     IonButton,
+    IonButtons,
     IonList,
     IonItem,
     IonLabel,
@@ -72,7 +79,9 @@ export class HomePage implements OnInit, OnDestroy {
   constructor(
     private bleService: BleService,
     private alertController: AlertController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private actionSheetController: ActionSheetController,
+    private translate: TranslateService
   ) {
     addIcons({
       bluetooth,
@@ -83,8 +92,45 @@ export class HomePage implements OnInit, OnDestroy {
       closeCircle,
       trash,
       refreshOutline,
-      gameController
+      gameController,
+      globe,
+      language
     });
+  }
+
+  async selectLanguage() {
+    const currentLang = this.translate.currentLang;
+    
+    const actionSheet = await this.actionSheetController.create({
+      header: this.translate.instant('LANGUAGE.SELECT'),
+      buttons: [
+        {
+          text: '🇸🇪 Svenska',
+          role: currentLang === 'sv' ? 'selected' : undefined,
+          handler: () => {
+            this.translate.use('sv');
+          }
+        },
+        {
+          text: '🇬🇧 English',
+          role: currentLang === 'en' ? 'selected' : undefined,
+          handler: () => {
+            this.translate.use('en');
+          }
+        },
+        {
+          text: this.translate.instant('ACTIONS.CANCEL'),
+          role: 'cancel'
+        }
+      ]
+    });
+    
+    await actionSheet.present();
+  }
+
+  getCurrentLanguageFlag(): string {
+    const lang = this.translate.currentLang || 'sv';
+    return lang === 'sv' ? '🇸🇪' : '🇬🇧';
   }
 
   async ngOnInit() {
@@ -94,19 +140,19 @@ export class HomePage implements OnInit, OnDestroy {
   async initializeBle() {
     try {
       await this.bleService.initialize();
-      await this.showToast('Bluetooth ready');
+      await this.showToast(this.translate.instant('BLUETOOTH.READY'));
     } catch (error: any) {
       console.error('BLE init error:', error);
       const alert = await this.alertController.create({
-        header: 'Bluetooth Error',
-        message: 'Could not initialize Bluetooth. Please make sure Bluetooth is enabled and permissions are granted.',
+        header: this.translate.instant('BLUETOOTH.ERROR.TITLE'),
+        message: this.translate.instant('BLUETOOTH.ERROR.INIT_FAILED'),
         buttons: [
           {
-            text: 'Cancel',
+            text: this.translate.instant('ACTIONS.CANCEL'),
             role: 'cancel'
           },
           {
-            text: 'Try Again',
+            text: this.translate.instant('ACTIONS.TRY_AGAIN'),
             handler: () => {
               this.initializeBle();
             }
@@ -142,7 +188,7 @@ export class HomePage implements OnInit, OnDestroy {
       }, 15000);
     } catch (error) {
       this.isScanning = false;
-      await this.showToast('Scan failed. Check Bluetooth permissions.');
+      await this.showToast(this.translate.instant('BLUETOOTH.ERROR.SCAN_FAILED'));
     }
   }
 
@@ -157,13 +203,21 @@ export class HomePage implements OnInit, OnDestroy {
     try {
       const success = await this.bleService.connect(device);
       if (success) {
-        await this.showToast(`Connected to ${device.name || 'device'}`);
+        const connectedMsg = this.translate.instant('BLUETOOTH.CONNECTED');
+        const deviceName = device.name || this.translate.instant('BLUETOOTH.UNKNOWN_DEVICE');
+        await this.showToast(`${connectedMsg} ${deviceName}`);
         this.startLogRefresh();
       } else {
-        await this.showAlert('Connection Failed', 'Could not connect to the device.');
+        await this.showAlert(
+          this.translate.instant('BLUETOOTH.ERROR.TITLE'),
+          this.translate.instant('BLUETOOTH.ERROR.CONNECTION_FAILED')
+        );
       }
     } catch (error) {
-      await this.showAlert('Connection Error', 'An error occurred while connecting.');
+      await this.showAlert(
+        this.translate.instant('BLUETOOTH.ERROR.TITLE'),
+        this.translate.instant('BLUETOOTH.ERROR.CONNECTION_ERROR')
+      );
     }
 
     this.isConnecting = false;
@@ -171,7 +225,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   async disconnect() {
     await this.bleService.disconnect();
-    await this.showToast('Disconnected');
+    await this.showToast(this.translate.instant('BLUETOOTH.DISCONNECT'));
   }
 
   private logRefreshInterval: any;

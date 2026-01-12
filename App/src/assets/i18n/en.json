@@ -1,0 +1,46 @@
+{
+  "APP": {
+    "TITLE": "THE BTN"
+  },
+  "BLUETOOTH": {
+    "STATUS": "Bluetooth Status",
+    "CONNECTED": "Connected to",
+    "NOT_CONNECTED": "Not connected",
+    "DISCONNECT": "Disconnect",
+    "SCANNING": "Scanning...",
+    "SCAN_FOR_DEVICE": "Scan for Quiz Master",
+    "STOP_SCAN": "Stop Scan",
+    "DISCOVERED_DEVICES": "Discovered Devices",
+    "UNKNOWN_DEVICE": "Unknown Device",
+    "CONNECT": "Connect",
+    "READY": "Bluetooth ready",
+    "ERROR": {
+      "TITLE": "Bluetooth Error",
+      "INIT_FAILED": "Could not initialize Bluetooth. Please make sure Bluetooth is enabled and permissions are granted.",
+      "SCAN_FAILED": "Scan failed. Check Bluetooth permissions.",
+      "CONNECTION_FAILED": "Could not connect to the device.",
+      "CONNECTION_ERROR": "An error occurred while connecting."
+    }
+  },
+  "LOG": {
+    "TITLE": "Button Press Log",
+    "EMPTY": "Waiting for button presses...",
+    "HINT": "Press any connected quiz button to see events here",
+    "BUTTON": "Button"
+  },
+  "HELP": {
+    "TITLE": "Get Started",
+    "STEP_1": "Make sure your Quiz Master device is powered on",
+    "STEP_2": "Enable Bluetooth on your phone",
+    "STEP_3": "Tap \"Scan for Quiz Master\" above",
+    "STEP_4": "Connect to your device"
+  },
+  "ACTIONS": {
+    "CANCEL": "Cancel",
+    "TRY_AGAIN": "Try Again",
+    "OK": "OK"
+  },
+  "LANGUAGE": {
+    "SELECT": "Select language"
+  }
+}
