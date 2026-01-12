@@ -78,16 +78,88 @@
     "ABOUT": "Om appen",
     "VERSION": "Version"
   },
+  "PLAYERS": {
+    "TITLE": "Spelare",
+    "WAITING_FOR_PLAYERS": "Väntar på spelare...",
+    "PRESS_BUTTON_HINT": "Tryck på knapparna på quiz-enheterna för att registrera spelare",
+    "NEW_PLAYER_CONNECTED": "Ny spelare ansluten! (Knapp {{id}})",
+    "NAME_PLACEHOLDER": "Ange spelarnamn",
+    "BUTTON": "Knapp"
+  },
+  "PLAY": {
+    "SELECT_GAME": "Välj spel",
+    "NO_GAMES": "Inga spel skapade ännu",
+    "CREATE_FIRST_GAME": "Skapa ditt första spel",
+    "START_GAME": "Starta spel",
+    "ERROR": "Fel",
+    "SELECT_GAME_AND_PLAYERS": "Välj ett spel och se till att minst en spelare är ansluten",
+    "STARTING_GAME": "Startar {{name}}...",
+    "GAME_READY": "Spelet är redo!",
+    "GAME_READY_MSG": "Startar \"{{game}}\" med spelare: {{players}}"
+  },
   "CREATE_GAME": {
-    "NEW_GAME": "Nytt spel",
+    "NEW_GAME": "Skapa nytt spel",
+    "MY_GAMES": "Mina spel",
+    "NO_GAMES": "Inga spel ännu. Skapa ditt första!",
+    "DELETE_MSG": "Är du säker på att du vill ta bort",
+    "TYPES": {
+      "CATEGORY": "Kategoriquiz",
+      "QUIZ": "Quiz",
+      "WHEEL": "Lyckohjul"
+    },
+    "FILTER": {
+      "ALL": "Alla"
+    }
+  },
+  "EDITOR": {
     "GAME_NAME": "Spelnamn",
     "GAME_NAME_PLACEHOLDER": "Ange ett namn för ditt spel",
-    "START": "Starta spel",
-    "INFO": {
-      "PLAYERS_TITLE": "Lägg till spelare",
-      "PLAYERS_DESC": "Anslut quizknappar och tilldela dem till spelare",
-      "BUTTONS_TITLE": "Quizknappar",
-      "BUTTONS_DESC": "Varje knapp registreras när den trycks under spelet"
+    "SAVED": "Sparat!",
+    "SAVE": "Spara",
+    "DELETE": "Ta bort",
+    "DELETE_CONFIRM": "Bekräfta borttagning",
+    "DELETE_CATEGORY_MSG": "Ta bort kategori",
+    "DELETE_QUESTION_MSG": "Är du säker på att du vill ta bort denna fråga?",
+    "DELETE_SEGMENT_MSG": "Ta bort segment",
+    "RENAME": "Byt namn",
+    "QUESTION_PLACEHOLDER": "Ange frågan",
+    "ANSWER_PLACEHOLDER": "Ange svaret",
+    "TAP_TO_EDIT": "Tryck för att redigera",
+    "QUESTION_ADDED": "Fråga tillagd!",
+    "CATEGORY": {
+      "TITLE": "Kategoriquiz-redigerare",
+      "ADD": "Lägg till kategori",
+      "EDIT": "Redigera kategori",
+      "NAME_PLACEHOLDER": "Kategorinamn",
+      "NO_CATEGORIES": "Inga kategorier ännu",
+      "ADD_HINT": "Tryck på + knappen för att lägga till din första kategori",
+      "QUESTIONS": "frågor",
+      "POINTS": "poäng"
+    },
+    "QUIZ": {
+      "TITLE": "Quiz-redigerare",
+      "QUESTIONS": "Frågor",
+      "NO_QUESTIONS": "Inga frågor ännu",
+      "ADD_HINT": "Tryck på + knappen för att lägga till din första fråga",
+      "ADD_QUESTION": "Lägg till fråga",
+      "EDIT_QUESTION": "Redigera fråga",
+      "TIME_LIMIT": "Tidsgräns (sekunder)",
+      "TIME_LIMIT_HINT": "Valfritt",
+      "SELECT_CORRECT": "Välj radioknappen bredvid rätt svar"
+    },
+    "WHEEL": {
+      "TITLE": "Lyckohjuls-redigerare",
+      "PREVIEW": "Förhandsgranskning",
+      "SEGMENTS": "Segment",
+      "NO_SEGMENTS": "Inga segment ännu",
+      "ADD_HINT": "Tryck på + knappen för att lägga till ditt första segment",
+      "ADD_SEGMENT": "Lägg till segment",
+      "EDIT_SEGMENT": "Redigera segment",
+      "LABEL_PLACEHOLDER": "Segmenttext",
+      "VALUE_PLACEHOLDER": "Poäng (valfritt)",
+      "ACTION_PLACEHOLDER": "Åtgärd (valfritt)",
+      "COLOR_PLACEHOLDER": "Färg (hex)",
+      "POINTS": "poäng"
     }
   }
 }

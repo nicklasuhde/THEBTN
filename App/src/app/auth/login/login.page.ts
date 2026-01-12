@@ -17,11 +17,9 @@ import {
   IonButton,
   IonSpinner,
   IonText,
-  IonIcon,
   ToastController
 } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { logIn, mail, lockClosed } from 'ionicons/icons';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 
@@ -34,6 +32,7 @@ import { AuthService } from '../../services/auth.service';
     FormsModule,
     RouterLink,
     TranslatePipe,
+    FontAwesomeModule,
     IonContent,
     IonHeader,
     IonTitle,
@@ -47,8 +46,7 @@ import { AuthService } from '../../services/auth.service';
     IonInput,
     IonButton,
     IonSpinner,
-    IonText,
-    IonIcon
+    IonText
   ]
 })
 export class LoginPage {
@@ -62,9 +60,7 @@ export class LoginPage {
     private router: Router,
     private toastController: ToastController,
     private translate: TranslateService
-  ) {
-    addIcons({ logIn, mail, lockClosed });
-  }
+  ) {}
 
   async onLogin() {
     if (!this.email || !this.password) {

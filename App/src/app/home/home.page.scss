@@ -5,6 +5,25 @@
   --warning-color: #ffce00;
 }
 
+// Color utilities
+.text-success { color: var(--success-color) !important; }
+.text-warning { color: var(--warning-color) !important; }
+.text-danger { color: #ff6b6b !important; }
+.text-primary { color: var(--ion-color-primary) !important; }
+.text-medium { color: #888 !important; }
+
+// Font Awesome icon styling
+fa-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &.connected {
+    color: var(--success-color);
+    animation: pulse 2s infinite;
+  }
+}
+
 ion-content {
   --background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
 }
@@ -225,6 +244,161 @@ ion-card {
         font-size: 0.7rem;
       }
     }
+  }
+}
+
+// Players Card
+.players-card {
+  .empty-players {
+    text-align: center;
+    padding: 30px 20px;
+
+    fa-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+
+    p {
+      color: #888;
+      margin: 8px 0;
+
+      &.hint {
+        font-size: 0.85rem;
+        color: #666;
+      }
+    }
+  }
+
+  ion-list {
+    background: transparent;
+    padding: 0;
+  }
+
+  ion-item {
+    --background: rgba(255, 255, 255, 0.03);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --padding-start: 16px;
+    --padding-end: 8px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+
+    h2 {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    p {
+      color: #888;
+      font-size: 0.85rem;
+    }
+
+    .player-name-input {
+      --color: #fff;
+      --placeholder-color: #666;
+    }
+  }
+}
+
+// Games Card
+.games-card {
+  .loading-games {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+  }
+
+  .empty-games {
+    text-align: center;
+    padding: 30px 20px;
+
+    fa-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+
+    p {
+      color: #888;
+      margin-bottom: 20px;
+    }
+  }
+
+  ion-list {
+    background: transparent;
+    padding: 0;
+  }
+
+  ion-item {
+    --background: rgba(255, 255, 255, 0.03);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --padding-start: 16px;
+    --padding-end: 16px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+
+    &.selected {
+      --background: rgba(16, 220, 96, 0.15);
+      border: 1px solid rgba(16, 220, 96, 0.3);
+    }
+
+    &:hover:not(.selected) {
+      --background: rgba(255, 255, 255, 0.08);
+    }
+
+    .game-type-icon {
+      font-size: 1.4rem;
+      color: var(--accent-color);
+    }
+
+    h2 {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    p {
+      color: #888;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+// Start Game Container
+.start-game-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  background: linear-gradient(to top, rgba(26, 26, 46, 0.98) 0%, rgba(26, 26, 46, 0.9) 80%, transparent 100%);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+
+  ion-button {
+    --border-radius: 16px;
+    font-size: 1.1rem;
+    height: 56px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .game-summary {
+    text-align: center;
+    color: #888;
+    font-size: 0.85rem;
+    margin-top: 8px;
+    margin-bottom: 0;
+  }
+}
+
+// Log Card minimized state
+.log-card.minimized {
+  margin-bottom: 120px; // Make room for start button
+
+  ion-card-content {
+    max-height: 200px;
+    overflow: hidden;
   }
 }
 

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BleClient, BleDevice, numberToUUID } from '@capacitor-community/bluetooth-le';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 export interface ButtonPressEvent {
   timestamp: Date;
   deviceId: string;
-  buttonId: string;
+  buttonId: number;
   data: string;
 }
 
@@ -19,6 +20,19 @@ export class BleService {
 
   private connectedDevice: BleDevice | null = null;
   private buttonPressLog: ButtonPressEvent[] = [];
+
+  // Observable for button press events
+  private buttonPressSubject = new Subject<ButtonPressEvent>();
+  public buttonPress$ = this.buttonPressSubject.asObservable();
+
+  // Observable for connection state
+  private connectionStateSubject = new BehaviorSubject<boolean>(false);
+  public connectionState$ = this.connectionStateSubject.asObservable();
+
+  // Track registered button IDs
+  private registeredButtons = new Set<number>();
+  private buttonRegistrationSubject = new Subject<number>();
+  public buttonRegistration$ = this.buttonRegistrationSubject.asObservable();
 
   constructor() {}
 
@@ -90,9 +104,19 @@ export class BleService {
       await BleClient.connect(device.deviceId, (deviceId) => {
         console.log('Device disconnected:', deviceId);
         this.connectedDevice = null;
+        this.connectionStateSubject.next(false);
       });
 
       this.connectedDevice = device;
+      this.connectionStateSubject.next(true);
+      
+      // Register master button (button 0) on connect
+      if (!this.registeredButtons.has(0)) {
+        this.registeredButtons.add(0);
+        this.buttonRegistrationSubject.next(0);
+        console.log('Master button registered: 0');
+      }
+      
       console.log('Connected to device:', device.name);
 
       // Subscribe to button press notifications
@@ -115,15 +139,27 @@ export class BleService {
         this.STATUS_UUID,
         (value) => {
           const data = this.dataViewToString(value);
+          const buttonId = this.parseButtonId(data);
+          
           const event: ButtonPressEvent = {
             timestamp: new Date(),
             deviceId: this.connectedDevice?.deviceId || 'unknown',
-            buttonId: this.parseButtonId(data),
+            buttonId: buttonId,
             data: data
           };
 
           this.buttonPressLog.unshift(event);
           console.log('Button press received:', event);
+
+          // Check if this is a new button we haven't seen before
+          if (!this.registeredButtons.has(buttonId)) {
+            this.registeredButtons.add(buttonId);
+            this.buttonRegistrationSubject.next(buttonId);
+            console.log('New button registered:', buttonId);
+          }
+
+          // Emit the button press event
+          this.buttonPressSubject.next(event);
 
           // Keep only the last 100 events
           if (this.buttonPressLog.length > 100) {
@@ -152,8 +188,14 @@ export class BleService {
 
       await BleClient.disconnect(this.connectedDevice.deviceId);
       this.connectedDevice = null;
+      this.connectionStateSubject.next(false);
       console.log('Disconnected');
     }
+  }
+
+  // Clear all registered buttons (for new session)
+  clearRegisteredButtons(): void {
+    this.registeredButtons.clear();
   }
 
   async sendCommand(command: string): Promise<void> {
@@ -195,11 +237,16 @@ export class BleService {
     return decoder.decode(dataView.buffer);
   }
 
-  private parseButtonId(data: string): string {
+  private parseButtonId(data: string): number {
     // Parse button ID from the data - adjust based on your firmware format
-    // For now, return the raw data or extract button number
-    const match = data.match(/BTN(\d+)/);
-    return match ? match[1] : data;
+    // Format from firmware: "BTN:X" where X is the button ID
+    const match = data.match(/BTN[:\s]*(\d+)/i);
+    if (match) {
+      return parseInt(match[1], 10);
+    }
+    // Try to parse as just a number
+    const num = parseInt(data.trim(), 10);
+    return isNaN(num) ? 0 : num;
   }
 }
 

@@ -4,6 +4,11 @@
  * THE BTN - Quiz Button Controller App
  */
 
+/* Hide jeep-sqlite component (used for web SQLite support) */
+jeep-sqlite {
+  display: none;
+}
+
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700&display=swap');
 
@@ -171,4 +176,45 @@ ion-badge {
   border-radius: 8px;
   padding: 6px 12px;
   font-weight: 600;
+}
+
+/* Font Awesome Icon Styling */
+fa-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  &[slot="start"] {
+    margin-right: 12px;
+    font-size: 1.25rem;
+  }
+  
+  &[slot="end"] {
+    margin-left: 12px;
+  }
+}
+
+ion-card-title fa-icon {
+  margin-right: 8px;
+}
+
+/* Icon Color Classes */
+.text-primary {
+  color: var(--ion-color-primary);
+}
+
+.text-success {
+  color: var(--ion-color-success);
+}
+
+.text-warning {
+  color: var(--ion-color-warning);
+}
+
+.text-danger {
+  color: var(--ion-color-danger);
+}
+
+.text-medium {
+  color: var(--ion-color-medium);
 }

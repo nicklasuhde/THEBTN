@@ -1,0 +1,54 @@
+.questions-content {
+  padding: 0;
+}
+
+ion-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  ion-icon {
+    font-size: 1.25rem;
+  }
+
+  ion-badge {
+    margin-left: auto;
+  }
+}
+
+ion-item h2 {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.correct-answer {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--ion-color-success);
+  font-size: 0.85rem;
+
+  ion-icon {
+    font-size: 1rem;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  margin-top: 2rem;
+
+  .empty-icon {
+    font-size: 4rem;
+    color: var(--ion-color-medium);
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    color: var(--ion-color-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: var(--ion-color-medium);
+  }
+}

@@ -18,7 +18,7 @@
       <ion-card-content>
         <form (ngSubmit)="onRegister()">
           <ion-item>
-            <ion-icon name="person" slot="start"></ion-icon>
+            <fa-icon [icon]="['fas', 'user']" slot="start"></fa-icon>
             <ion-input
               type="text"
               [(ngModel)]="firstName"
@@ -29,7 +29,7 @@
           </ion-item>
 
           <ion-item>
-            <ion-icon name="person" slot="start"></ion-icon>
+            <fa-icon [icon]="['fas', 'user']" slot="start"></fa-icon>
             <ion-input
               type="text"
               [(ngModel)]="lastName"
@@ -40,7 +40,7 @@
           </ion-item>
 
           <ion-item>
-            <ion-icon name="mail" slot="start"></ion-icon>
+            <fa-icon [icon]="['fas', 'envelope']" slot="start"></fa-icon>
             <ion-input
               type="email"
               [(ngModel)]="email"
@@ -52,7 +52,7 @@
           </ion-item>
 
           <ion-item>
-            <ion-icon name="lock-closed" slot="start"></ion-icon>
+            <fa-icon [icon]="['fas', 'lock']" slot="start"></fa-icon>
             <ion-input
               type="password"
               [(ngModel)]="password"
@@ -64,7 +64,7 @@
           </ion-item>
 
           <ion-item>
-            <ion-icon name="lock-closed" slot="start"></ion-icon>
+            <fa-icon [icon]="['fas', 'lock']" slot="start"></fa-icon>
             <ion-input
               type="password"
               [(ngModel)]="confirmPassword"
@@ -91,7 +91,7 @@
               <ion-spinner name="crescent"></ion-spinner>
               {{ 'AUTH.REGISTERING' | translate }}
             } @else {
-              <ion-icon name="person-add" slot="start"></ion-icon>
+              <fa-icon [icon]="['fas', 'user-plus']" slot="start"></fa-icon>
               {{ 'AUTH.CREATE_ACCOUNT' | translate }}
             }
           </ion-button>

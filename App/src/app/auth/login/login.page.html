@@ -15,7 +15,7 @@
       <ion-card-content>
         <form (ngSubmit)="onLogin()">
           <ion-item>
-            <ion-icon name="mail" slot="start"></ion-icon>
+            <fa-icon [icon]="['fas', 'envelope']" slot="start"></fa-icon>
             <ion-input
               type="email"
               [(ngModel)]="email"
@@ -27,7 +27,7 @@
           </ion-item>
 
           <ion-item>
-            <ion-icon name="lock-closed" slot="start"></ion-icon>
+            <fa-icon [icon]="['fas', 'lock']" slot="start"></fa-icon>
             <ion-input
               type="password"
               [(ngModel)]="password"
@@ -54,7 +54,7 @@
               <ion-spinner name="crescent"></ion-spinner>
               {{ 'AUTH.LOGGING_IN' | translate }}
             } @else {
-              <ion-icon name="log-in" slot="start"></ion-icon>
+              <fa-icon [icon]="['fas', 'sign-in-alt']" slot="start"></fa-icon>
               {{ 'AUTH.LOGIN' | translate }}
             }
           </ion-button>

@@ -1,0 +1,109 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/create-game"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'EDITOR.WHEEL.TITLE' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="saveGameName()" [disabled]="!gameName.trim()">
+        <fa-icon [icon]="['fas', 'save']"></fa-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- Game Name -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <fa-icon [icon]="['fas', 'dharmachakra']"></fa-icon>
+        {{ 'EDITOR.GAME_NAME' | translate }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-input
+        [(ngModel)]="gameName"
+        [placeholder]="('EDITOR.GAME_NAME_PLACEHOLDER' | translate)"
+        (ionBlur)="saveGameName()"
+      ></ion-input>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Wheel Preview -->
+  @if (game?.segments?.length) {
+    <ion-card class="wheel-preview-card">
+      <ion-card-header>
+        <ion-card-title>{{ 'EDITOR.WHEEL.PREVIEW' | translate }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="wheel-preview">
+          @for (segment of game!.segments; track segment.id; let i = $index) {
+            <div class="segment-preview" 
+                 [style.background-color]="segment.color"
+                 [style.transform]="'rotate(' + (i * (360 / game!.segments.length)) + 'deg)'">
+            </div>
+          }
+        </div>
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <!-- Segments List -->
+  @if (game?.segments?.length) {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          {{ 'EDITOR.WHEEL.SEGMENTS' | translate }}
+          <ion-badge color="primary">{{ game!.segments.length }}</ion-badge>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="segments-content">
+        <ion-list>
+          @for (segment of game!.segments; track segment.id) {
+            <ion-item-sliding>
+              <ion-item button (click)="editSegment(segment)">
+                <div class="color-dot" slot="start" [style.background-color]="segment.color"></div>
+                <ion-label>
+                  <h2>{{ segment.label }}</h2>
+                  <p>
+                    @if (segment.value) {
+                      <span class="segment-value">{{ segment.value }} {{ 'EDITOR.WHEEL.POINTS' | translate }}</span>
+                    }
+                    @if (segment.action) {
+                      <span class="segment-action">{{ segment.action }}</span>
+                    }
+                  </p>
+                </ion-label>
+                <fa-icon [icon]="['fas', 'edit']" slot="end" class="text-medium"></fa-icon>
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="deleteSegment(segment)">
+                  <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          }
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <!-- Empty State -->
+  @if (!isLoading && (!game?.segments?.length)) {
+    <ion-card class="empty-state">
+      <ion-card-content>
+        <fa-icon [icon]="['fas', 'palette']" class="empty-icon"></fa-icon>
+        <h2>{{ 'EDITOR.WHEEL.NO_SEGMENTS' | translate }}</h2>
+        <p>{{ 'EDITOR.WHEEL.ADD_HINT' | translate }}</p>
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <!-- FAB for adding segments -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="addSegment()">
+      <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

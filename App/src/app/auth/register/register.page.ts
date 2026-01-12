@@ -14,14 +14,12 @@ import {
   IonButton,
   IonSpinner,
   IonText,
-  IonIcon,
   IonButtons,
   IonBackButton,
   ToastController,
   AlertController
 } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { personAdd, mail, lockClosed, person } from 'ionicons/icons';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 
@@ -34,6 +32,7 @@ import { AuthService } from '../../services/auth.service';
     FormsModule,
     RouterLink,
     TranslatePipe,
+    FontAwesomeModule,
     IonContent,
     IonHeader,
     IonTitle,
@@ -45,7 +44,6 @@ import { AuthService } from '../../services/auth.service';
     IonButton,
     IonSpinner,
     IonText,
-    IonIcon,
     IonButtons,
     IonBackButton
   ]
@@ -65,9 +63,7 @@ export class RegisterPage {
     private toastController: ToastController,
     private alertController: AlertController,
     private translate: TranslateService
-  ) {
-    addIcons({ personAdd, mail, lockClosed, person });
-  }
+  ) {}
 
   async onRegister() {
     if (!this.email || !this.password || !this.confirmPassword) {

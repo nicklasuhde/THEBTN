@@ -1,0 +1,99 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/create-game"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'EDITOR.CATEGORY.TITLE' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="saveGameName()" [disabled]="!gameName.trim()">
+        <fa-icon [icon]="['fas', 'save']"></fa-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- Game Name -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <fa-icon [icon]="['fas', 'th-large']"></fa-icon>
+        {{ 'EDITOR.GAME_NAME' | translate }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-input
+        [(ngModel)]="gameName"
+        [placeholder]="('EDITOR.GAME_NAME_PLACEHOLDER' | translate)"
+        (ionBlur)="saveGameName()"
+      ></ion-input>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Categories -->
+  @if (game?.categories?.length) {
+    <ion-accordion-group>
+      @for (category of game!.categories; track category.id) {
+        <ion-accordion [value]="'cat-' + category.id">
+          <ion-item slot="header" color="light">
+            <ion-label>{{ category.name }}</ion-label>
+            <ion-badge slot="end" color="primary">
+              {{ category.questions.length }} {{ 'EDITOR.CATEGORY.QUESTIONS' | translate }}
+            </ion-badge>
+          </ion-item>
+          
+          <div slot="content" class="category-content">
+            <div class="category-actions">
+              <ion-button fill="clear" size="small" (click)="editCategoryName(category)">
+                <fa-icon [icon]="['fas', 'edit']" slot="start"></fa-icon>
+                {{ 'EDITOR.RENAME' | translate }}
+              </ion-button>
+              <ion-button fill="clear" size="small" color="danger" (click)="deleteCategory(category)">
+                <fa-icon [icon]="['fas', 'trash']" slot="start"></fa-icon>
+                {{ 'EDITOR.DELETE' | translate }}
+              </ion-button>
+            </div>
+            
+            <ion-list>
+              @for (question of category.questions; track question.id) {
+                <ion-item button (click)="editQuestion(question)" 
+                          [class.complete]="getQuestionStatus(question) === 'complete'"
+                          [class.partial]="getQuestionStatus(question) === 'partial'">
+                  <ion-badge slot="start" [color]="getQuestionStatus(question) === 'complete' ? 'success' : 'medium'">
+                    {{ question.points }}
+                  </ion-badge>
+                  <ion-label>
+                    @if (question.question) {
+                      <p class="question-preview">{{ question.question }}</p>
+                    } @else {
+                      <p class="empty-hint">{{ 'EDITOR.TAP_TO_EDIT' | translate }}</p>
+                    }
+                  </ion-label>
+                  <fa-icon [icon]="['fas', 'edit']" slot="end" class="text-medium"></fa-icon>
+                </ion-item>
+              }
+            </ion-list>
+          </div>
+        </ion-accordion>
+      }
+    </ion-accordion-group>
+  }
+
+  <!-- Empty State -->
+  @if (!isLoading && (!game?.categories?.length)) {
+    <ion-card class="empty-state">
+      <ion-card-content>
+        <fa-icon [icon]="['fas', 'question-circle']" class="empty-icon"></fa-icon>
+        <h2>{{ 'EDITOR.CATEGORY.NO_CATEGORIES' | translate }}</h2>
+        <p>{{ 'EDITOR.CATEGORY.ADD_HINT' | translate }}</p>
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <!-- FAB for adding categories -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="addCategory()">
+      <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

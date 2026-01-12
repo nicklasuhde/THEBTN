@@ -8,15 +8,12 @@ import {
   IonList,
   IonItem,
   IonLabel,
-  IonIcon,
   IonButtons,
   IonMenuButton,
-  IonToggle,
   ActionSheetController,
   AlertController
 } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { settingsOutline, languageOutline, personOutline, informationCircleOutline, logOutOutline } from 'ionicons/icons';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../services/auth.service';
@@ -28,6 +25,7 @@ import { AuthService } from '../services/auth.service';
   imports: [
     CommonModule,
     TranslatePipe,
+    FontAwesomeModule,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -35,10 +33,8 @@ import { AuthService } from '../services/auth.service';
     IonList,
     IonItem,
     IonLabel,
-    IonIcon,
     IonButtons,
-    IonMenuButton,
-    IonToggle
+    IonMenuButton
   ],
 })
 export class SettingsPage {
@@ -48,15 +44,7 @@ export class SettingsPage {
     private router: Router,
     private actionSheetController: ActionSheetController,
     private alertController: AlertController
-  ) {
-    addIcons({
-      settingsOutline,
-      languageOutline,
-      personOutline,
-      informationCircleOutline,
-      logOutOutline
-    });
-  }
+  ) {}
 
   getCurrentLanguageLabel(): string {
     const lang = this.translate.currentLang || 'sv';

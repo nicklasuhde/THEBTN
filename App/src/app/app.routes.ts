@@ -13,6 +13,21 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'editor/category/:id',
+    loadComponent: () => import('./editors/category-editor/category-editor.page').then((m) => m.CategoryEditorPage),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'editor/quiz/:id',
+    loadComponent: () => import('./editors/quiz-editor/quiz-editor.page').then((m) => m.QuizEditorPage),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'editor/wheel/:id',
+    loadComponent: () => import('./editors/wheel-editor/wheel-editor.page').then((m) => m.WheelEditorPage),
+    canActivate: [authGuard]
+  },
+  {
     path: 'settings',
     loadComponent: () => import('./settings/settings.page').then((m) => m.SettingsPage),
     canActivate: [authGuard]

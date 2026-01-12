@@ -78,16 +78,88 @@
     "ABOUT": "About",
     "VERSION": "Version"
   },
+  "PLAYERS": {
+    "TITLE": "Players",
+    "WAITING_FOR_PLAYERS": "Waiting for players...",
+    "PRESS_BUTTON_HINT": "Press buttons on the quiz devices to register players",
+    "NEW_PLAYER_CONNECTED": "New player connected! (Button {{id}})",
+    "NAME_PLACEHOLDER": "Enter player name",
+    "BUTTON": "Button"
+  },
+  "PLAY": {
+    "SELECT_GAME": "Select Game",
+    "NO_GAMES": "No games created yet",
+    "CREATE_FIRST_GAME": "Create Your First Game",
+    "START_GAME": "Start Game",
+    "ERROR": "Error",
+    "SELECT_GAME_AND_PLAYERS": "Please select a game and make sure at least one player is connected",
+    "STARTING_GAME": "Starting {{name}}...",
+    "GAME_READY": "Game Ready!",
+    "GAME_READY_MSG": "Starting \"{{game}}\" with players: {{players}}"
+  },
   "CREATE_GAME": {
-    "NEW_GAME": "New Game",
-    "GAME_NAME": "Game name",
+    "NEW_GAME": "Create New Game",
+    "MY_GAMES": "My Games",
+    "NO_GAMES": "No games yet. Create your first one!",
+    "DELETE_MSG": "Are you sure you want to delete",
+    "TYPES": {
+      "CATEGORY": "Category Quiz",
+      "QUIZ": "Quiz",
+      "WHEEL": "Wheel"
+    },
+    "FILTER": {
+      "ALL": "All"
+    }
+  },
+  "EDITOR": {
+    "GAME_NAME": "Game Name",
     "GAME_NAME_PLACEHOLDER": "Enter a name for your game",
-    "START": "Start Game",
-    "INFO": {
-      "PLAYERS_TITLE": "Add Players",
-      "PLAYERS_DESC": "Connect quiz buttons and assign them to players",
-      "BUTTONS_TITLE": "Quiz Buttons",
-      "BUTTONS_DESC": "Each button will register when pressed during gameplay"
+    "SAVED": "Saved!",
+    "SAVE": "Save",
+    "DELETE": "Delete",
+    "DELETE_CONFIRM": "Confirm Delete",
+    "DELETE_CATEGORY_MSG": "Delete category",
+    "DELETE_QUESTION_MSG": "Are you sure you want to delete this question?",
+    "DELETE_SEGMENT_MSG": "Delete segment",
+    "RENAME": "Rename",
+    "QUESTION_PLACEHOLDER": "Enter the question",
+    "ANSWER_PLACEHOLDER": "Enter the answer",
+    "TAP_TO_EDIT": "Tap to edit",
+    "QUESTION_ADDED": "Question added!",
+    "CATEGORY": {
+      "TITLE": "Category Quiz Editor",
+      "ADD": "Add Category",
+      "EDIT": "Edit Category",
+      "NAME_PLACEHOLDER": "Category name",
+      "NO_CATEGORIES": "No categories yet",
+      "ADD_HINT": "Tap the + button to add your first category",
+      "QUESTIONS": "questions",
+      "POINTS": "points"
+    },
+    "QUIZ": {
+      "TITLE": "Quiz Editor",
+      "QUESTIONS": "Questions",
+      "NO_QUESTIONS": "No questions yet",
+      "ADD_HINT": "Tap the + button to add your first question",
+      "ADD_QUESTION": "Add Question",
+      "EDIT_QUESTION": "Edit Question",
+      "TIME_LIMIT": "Time limit (seconds)",
+      "TIME_LIMIT_HINT": "Optional",
+      "SELECT_CORRECT": "Select the radio button next to the correct answer"
+    },
+    "WHEEL": {
+      "TITLE": "Wheel Editor",
+      "PREVIEW": "Preview",
+      "SEGMENTS": "Segments",
+      "NO_SEGMENTS": "No segments yet",
+      "ADD_HINT": "Tap the + button to add your first segment",
+      "ADD_SEGMENT": "Add Segment",
+      "EDIT_SEGMENT": "Edit Segment",
+      "LABEL_PLACEHOLDER": "Segment label",
+      "VALUE_PLACEHOLDER": "Points (optional)",
+      "ACTION_PLACEHOLDER": "Action (optional)",
+      "COLOR_PLACEHOLDER": "Color (hex)",
+      "POINTS": "points"
     }
   }
 }

@@ -11,11 +11,9 @@ import {
   IonList,
   IonItem,
   IonLabel,
-  IonIcon,
   IonMenuToggle
 } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { gameControllerOutline, addCircleOutline, settingsOutline } from 'ionicons/icons';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 
 @Component({
@@ -26,6 +24,7 @@ import { TranslateService, TranslatePipe } from '@ngx-translate/core';
     RouterLink,
     RouterLinkActive,
     TranslatePipe,
+    FontAwesomeModule,
     IonApp,
     IonRouterOutlet,
     IonMenu,
@@ -36,18 +35,11 @@ import { TranslateService, TranslatePipe } from '@ngx-translate/core';
     IonList,
     IonItem,
     IonLabel,
-    IonIcon,
     IonMenuToggle
   ],
 })
 export class AppComponent {
   constructor(private translate: TranslateService) {
-    addIcons({
-      gameControllerOutline,
-      addCircleOutline,
-      settingsOutline
-    });
-    
     this.translate.addLangs(['sv', 'en']);
     this.translate.setDefaultLang('sv');
     

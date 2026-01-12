@@ -16,24 +16,23 @@
   <ion-card class="status-card">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon [name]="isConnected() ? 'bluetooth' : 'bluetoothOutline'" 
-                  [class.connected]="isConnected()"></ion-icon>
+        <fa-icon [icon]="['fab', 'bluetooth-b']" [class.connected]="isConnected()"></fa-icon>
         {{ 'BLUETOOTH.STATUS' | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
       @if (isConnected()) {
         <div class="connection-status connected">
-          <ion-icon name="checkmarkCircle" color="success"></ion-icon>
+          <fa-icon [icon]="['fas', 'check-circle']" class="text-success"></fa-icon>
           <span>{{ 'BLUETOOTH.CONNECTED' | translate }} <strong>{{ getConnectedDevice()?.name || ('BLUETOOTH.UNKNOWN_DEVICE' | translate) }}</strong></span>
         </div>
         <ion-button expand="block" color="danger" (click)="disconnect()">
-          <ion-icon name="closeCircle" slot="start"></ion-icon>
+          <fa-icon [icon]="['fas', 'times-circle']" slot="start"></fa-icon>
           {{ 'BLUETOOTH.DISCONNECT' | translate }}
         </ion-button>
       } @else {
         <div class="connection-status disconnected">
-          <ion-icon name="closeCircle" color="medium"></ion-icon>
+          <fa-icon [icon]="['fas', 'times-circle']" class="text-medium"></fa-icon>
           <span>{{ 'BLUETOOTH.NOT_CONNECTED' | translate }}</span>
         </div>
         <ion-button expand="block" (click)="startScan()" [disabled]="isScanning">
@@ -41,7 +40,7 @@
             <ion-spinner name="crescent" slot="start"></ion-spinner>
             {{ 'BLUETOOTH.SCANNING' | translate }}
           } @else {
-            <ion-icon name="search" slot="start"></ion-icon>
+            <fa-icon [icon]="['fas', 'search']" slot="start"></fa-icon>
             {{ 'BLUETOOTH.SCAN_FOR_DEVICE' | translate }}
           }
         </ion-button>
@@ -59,7 +58,7 @@
     <ion-card class="devices-card">
       <ion-card-header>
         <ion-card-title>
-          <ion-icon name="bluetooth"></ion-icon>
+          <fa-icon [icon]="['fab', 'bluetooth-b']"></fa-icon>
           {{ 'BLUETOOTH.DISCOVERED_DEVICES' | translate }}
         </ion-card-title>
       </ion-card-header>
@@ -67,7 +66,7 @@
         <ion-list lines="full">
           @for (device of discoveredDevices; track device.deviceId) {
             <ion-item button (click)="connectToDevice(device)" [disabled]="isConnecting">
-              <ion-icon name="bluetooth" slot="start" color="primary"></ion-icon>
+              <fa-icon [icon]="['fab', 'bluetooth-b']" slot="start" class="text-primary"></fa-icon>
               <ion-label>
                 <h2>{{ device.name || ('BLUETOOTH.UNKNOWN_DEVICE' | translate) }}</h2>
                 <p class="device-id">{{ device.deviceId }}</p>
@@ -84,44 +83,154 @@
     </ion-card>
   }
 
-  <!-- Button Press Log -->
+  <!-- Players Card (shown when connected) -->
   @if (isConnected()) {
-    <ion-card class="log-card">
+    <ion-card class="players-card">
       <ion-card-header>
         <ion-card-title>
-          <ion-icon name="flash"></ion-icon>
+          <fa-icon [icon]="['fas', 'users']"></fa-icon>
+          {{ 'PLAYERS.TITLE' | translate }}
+          <ion-chip color="success">{{ players.length }}</ion-chip>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        @if (players.length === 0) {
+          <div class="empty-players">
+            <fa-icon [icon]="['fas', 'user-plus']" class="text-medium"></fa-icon>
+            <p>{{ 'PLAYERS.WAITING_FOR_PLAYERS' | translate }}</p>
+            <p class="hint">{{ 'PLAYERS.PRESS_BUTTON_HINT' | translate }}</p>
+          </div>
+        } @else {
+          <ion-list lines="full">
+            @for (player of players; track player.id) {
+              <ion-item>
+                <fa-icon 
+                  [icon]="player.isMaster ? ['fas', 'crown'] : ['fas', 'user']" 
+                  slot="start"
+                  [class.text-warning]="player.isMaster"
+                  [class.text-primary]="!player.isMaster"
+                ></fa-icon>
+                
+                @if (editingPlayerId === player.id) {
+                  <ion-input
+                    [(ngModel)]="editingPlayerName"
+                    (keyup.enter)="savePlayerName(player)"
+                    (keyup.escape)="cancelEditPlayer()"
+                    [placeholder]="'PLAYERS.NAME_PLACEHOLDER' | translate"
+                    class="player-name-input"
+                  ></ion-input>
+                  <ion-button fill="clear" slot="end" (click)="savePlayerName(player)">
+                    <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
+                  </ion-button>
+                  <ion-button fill="clear" slot="end" (click)="cancelEditPlayer()">
+                    <fa-icon [icon]="['fas', 'times']" class="text-danger"></fa-icon>
+                  </ion-button>
+                } @else {
+                  <ion-label>
+                    <h2>{{ player.name }}</h2>
+                    <p>{{ 'PLAYERS.BUTTON' | translate }} {{ player.buttonId }}</p>
+                  </ion-label>
+                  <ion-button fill="clear" slot="end" (click)="startEditPlayer(player)">
+                    <fa-icon [icon]="['fas', 'pen']"></fa-icon>
+                  </ion-button>
+                }
+              </ion-item>
+            }
+          </ion-list>
+        }
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <!-- Game Selection Card (shown when connected and has players) -->
+  @if (isConnected() && players.length > 0) {
+    <ion-card class="games-card">
+      <ion-card-header>
+        <ion-card-title>
+          <fa-icon [icon]="['fas', 'gamepad']"></fa-icon>
+          {{ 'PLAY.SELECT_GAME' | translate }}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        @if (isLoadingGames) {
+          <div class="loading-games">
+            <ion-spinner name="crescent"></ion-spinner>
+          </div>
+        } @else if (games.length === 0) {
+          <div class="empty-games">
+            <fa-icon [icon]="['fas', 'folder-open']" class="text-medium"></fa-icon>
+            <p>{{ 'PLAY.NO_GAMES' | translate }}</p>
+            <ion-button routerLink="/create-game">
+              <fa-icon [icon]="['fas', 'plus']" slot="start"></fa-icon>
+              {{ 'PLAY.CREATE_FIRST_GAME' | translate }}
+            </ion-button>
+          </div>
+        } @else {
+          <ion-list lines="full">
+            @for (game of games; track game.id) {
+              <ion-item 
+                button 
+                (click)="selectGame(game)"
+                [class.selected]="selectedGame?.id === game.id"
+              >
+                <fa-icon [icon]="getGameTypeIcon(game.type)" slot="start" class="game-type-icon"></fa-icon>
+                <ion-label>
+                  <h2>{{ game.name }}</h2>
+                  <p>{{ ('CREATE_GAME.TYPES.' + game.type.toUpperCase()) | translate }}</p>
+                </ion-label>
+                @if (selectedGame?.id === game.id) {
+                  <fa-icon [icon]="['fas', 'check-circle']" slot="end" class="text-success"></fa-icon>
+                }
+              </ion-item>
+            }
+          </ion-list>
+        }
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <!-- Start Game Button -->
+  @if (isConnected() && players.length > 0 && selectedGame) {
+    <div class="start-game-container">
+      <ion-button expand="block" size="large" color="success" (click)="startGame()">
+        <fa-icon [icon]="['fas', 'play']" slot="start"></fa-icon>
+        {{ 'PLAY.START_GAME' | translate }}
+      </ion-button>
+      <p class="game-summary">
+        {{ selectedGame.name }} • {{ players.length }} {{ 'PLAYERS.TITLE' | translate | lowercase }}
+      </p>
+    </div>
+  }
+
+  <!-- Button Press Log (minimized when game selected) -->
+  @if (isConnected() && buttonPressLog.length > 0) {
+    <ion-card class="log-card" [class.minimized]="selectedGame">
+      <ion-card-header>
+        <ion-card-title>
+          <fa-icon [icon]="['fas', 'bolt']"></fa-icon>
           {{ 'LOG.TITLE' | translate }}
           <ion-chip color="success" class="log-count">
             {{ buttonPressLog.length }}
           </ion-chip>
         </ion-card-title>
         <ion-button fill="clear" size="small" (click)="clearLog()">
-          <ion-icon name="trash" slot="icon-only"></ion-icon>
+          <fa-icon [icon]="['fas', 'trash']"></fa-icon>
         </ion-button>
       </ion-card-header>
       <ion-card-content>
-        @if (buttonPressLog.length === 0) {
-          <div class="empty-log">
-            <ion-icon name="flash" color="medium"></ion-icon>
-            <p>{{ 'LOG.EMPTY' | translate }}</p>
-            <p class="hint">{{ 'LOG.HINT' | translate }}</p>
-          </div>
-        } @else {
-          <ion-list lines="full" class="log-list">
-            @for (event of buttonPressLog; track event.timestamp.getTime()) {
-              <ion-item class="log-item">
-                <div class="log-icon" slot="start">
-                  <ion-icon name="flash" color="warning"></ion-icon>
-                </div>
-                <ion-label>
-                  <h3 class="log-button-id">{{ 'LOG.BUTTON' | translate }} {{ event.buttonId }}</h3>
-                  <p class="log-time">{{ formatTime(event.timestamp) }}</p>
-                </ion-label>
-                <ion-badge slot="end" color="tertiary">{{ event.data }}</ion-badge>
-              </ion-item>
-            }
-          </ion-list>
-        }
+        <ion-list lines="full" class="log-list">
+          @for (event of buttonPressLog.slice(0, 5); track event.timestamp.getTime()) {
+            <ion-item class="log-item">
+              <div class="log-icon" slot="start">
+                <fa-icon [icon]="['fas', 'bolt']" class="text-warning"></fa-icon>
+              </div>
+              <ion-label>
+                <h3 class="log-button-id">{{ 'LOG.BUTTON' | translate }} {{ event.buttonId }}</h3>
+                <p class="log-time">{{ formatTime(event.timestamp) }}</p>
+              </ion-label>
+            </ion-item>
+          }
+        </ion-list>
       </ion-card-content>
     </ion-card>
   }
@@ -131,7 +240,7 @@
     <ion-card class="help-card">
       <ion-card-content>
         <div class="help-content">
-          <ion-icon name="bluetooth" class="help-icon"></ion-icon>
+          <fa-icon [icon]="['fab', 'bluetooth-b']" class="help-icon"></fa-icon>
           <h2>{{ 'HELP.TITLE' | translate }}</h2>
           <p>1. {{ 'HELP.STEP_1' | translate }}</p>
           <p>2. {{ 'HELP.STEP_2' | translate }}</p>

@@ -1,0 +1,86 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/create-game"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'EDITOR.QUIZ.TITLE' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="saveGameName()" [disabled]="!gameName.trim()">
+        <fa-icon [icon]="['fas', 'save']"></fa-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- Game Name -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <fa-icon [icon]="['fas', 'list-ol']"></fa-icon>
+        {{ 'EDITOR.GAME_NAME' | translate }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-input
+        [(ngModel)]="gameName"
+        [placeholder]="('EDITOR.GAME_NAME_PLACEHOLDER' | translate)"
+        (ionBlur)="saveGameName()"
+      ></ion-input>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Questions List -->
+  @if (game?.questions?.length) {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          {{ 'EDITOR.QUIZ.QUESTIONS' | translate }}
+          <ion-badge color="primary">{{ game!.questions.length }}</ion-badge>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="questions-content">
+        <ion-list>
+          @for (question of game!.questions; track question.id; let i = $index) {
+            <ion-item-sliding>
+              <ion-item button (click)="editQuestion(question)">
+                <ion-badge slot="start" color="medium">{{ i + 1 }}</ion-badge>
+                <ion-label>
+                  <h2>{{ question.question }}</h2>
+                  <p class="correct-answer">
+                    <fa-icon [icon]="['fas', 'check-circle']" class="text-success"></fa-icon>
+                    {{ question.correctAnswer }}: {{ getCorrectAnswerText(question) }}
+                  </p>
+                </ion-label>
+                <fa-icon [icon]="['fas', 'edit']" slot="end" class="text-medium"></fa-icon>
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="deleteQuestion(question)">
+                  <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          }
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <!-- Empty State -->
+  @if (!isLoading && (!game?.questions?.length)) {
+    <ion-card class="empty-state">
+      <ion-card-content>
+        <fa-icon [icon]="['fas', 'list-ol']" class="empty-icon"></fa-icon>
+        <h2>{{ 'EDITOR.QUIZ.NO_QUESTIONS' | translate }}</h2>
+        <p>{{ 'EDITOR.QUIZ.ADD_HINT' | translate }}</p>
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <!-- FAB for adding questions -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="addQuestion()">
+      <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

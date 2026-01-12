@@ -8,48 +8,84 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Create New Game Section -->
   <ion-card>
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="game-controller-outline"></ion-icon>
+        <fa-icon [icon]="['fas', 'plus-circle']"></fa-icon>
         {{ 'CREATE_GAME.NEW_GAME' | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-list>
-        <ion-item>
-          <ion-input 
-            [(ngModel)]="gameName"
-            [label]="('CREATE_GAME.GAME_NAME' | translate)"
-            labelPlacement="floating"
-            [placeholder]="('CREATE_GAME.GAME_NAME_PLACEHOLDER' | translate)"
-          ></ion-input>
-        </ion-item>
-      </ion-list>
-
-      <ion-button expand="block" (click)="createGame()" [disabled]="!gameName.trim()">
-        <ion-icon name="play-outline" slot="start"></ion-icon>
-        {{ 'CREATE_GAME.START' | translate }}
-      </ion-button>
+      <div class="game-types">
+        @for (gameType of gameTypes; track gameType.type) {
+          <div class="game-type-card" (click)="createNewGame(gameType.type)">
+            <fa-icon [icon]="['fas', gameType.icon]"></fa-icon>
+            <span>{{ gameType.labelKey | translate }}</span>
+          </div>
+        }
+      </div>
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="info-card">
-    <ion-card-content>
-      <div class="info-item">
-        <ion-icon name="people-outline" color="primary"></ion-icon>
-        <div>
-          <h3>{{ 'CREATE_GAME.INFO.PLAYERS_TITLE' | translate }}</h3>
-          <p>{{ 'CREATE_GAME.INFO.PLAYERS_DESC' | translate }}</p>
+  <!-- Existing Games Section -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <fa-icon [icon]="['fas', 'gamepad']"></fa-icon>
+        {{ 'CREATE_GAME.MY_GAMES' | translate }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="games-content">
+      <!-- Filter Segment -->
+      <ion-segment [(ngModel)]="selectedFilter" (ionChange)="onFilterChange()">
+        <ion-segment-button value="all">
+          {{ 'CREATE_GAME.FILTER.ALL' | translate }}
+        </ion-segment-button>
+        <ion-segment-button value="category">
+          <fa-icon [icon]="['fas', 'th-large']"></fa-icon>
+        </ion-segment-button>
+        <ion-segment-button value="quiz">
+          <fa-icon [icon]="['fas', 'list-ol']"></fa-icon>
+        </ion-segment-button>
+        <ion-segment-button value="wheel">
+          <fa-icon [icon]="['fas', 'dharmachakra']"></fa-icon>
+        </ion-segment-button>
+      </ion-segment>
+
+      @if (games.length > 0) {
+        <ion-list>
+          @for (game of games; track game.id) {
+            <ion-item-sliding>
+              <ion-item button (click)="editGame(game)">
+                <fa-icon [icon]="getGameTypeIcon(game.type)" slot="start" class="text-primary"></fa-icon>
+                <ion-label>
+                  <h2>{{ game.name }}</h2>
+                  <p>
+                    <ion-badge color="medium">{{ getGameTypeLabel(game.type) }}</ion-badge>
+                    <span class="game-date">{{ formatDate(game.updatedAt) }}</span>
+                  </p>
+                </ion-label>
+                <fa-icon [icon]="['fas', 'edit']" slot="end" class="text-medium"></fa-icon>
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="deleteGame(game)">
+                  <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          }
+        </ion-list>
+      } @else if (!isLoading) {
+        <div class="empty-state">
+          <fa-icon [icon]="['fas', 'gamepad']"></fa-icon>
+          <p>{{ 'CREATE_GAME.NO_GAMES' | translate }}</p>
         </div>
-      </div>
-      <div class="info-item">
-        <ion-icon name="game-controller-outline" color="primary"></ion-icon>
-        <div>
-          <h3>{{ 'CREATE_GAME.INFO.BUTTONS_TITLE' | translate }}</h3>
-          <p>{{ 'CREATE_GAME.INFO.BUTTONS_DESC' | translate }}</p>
-        </div>
-      </div>
+      }
     </ion-card-content>
   </ion-card>
 </ion-content>

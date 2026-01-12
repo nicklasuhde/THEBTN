@@ -9,21 +9,21 @@
       <ion-list>
         <ion-menu-toggle auto-hide="true">
           <ion-item button routerLink="/play" routerDirection="root" routerLinkActive="active-link">
-            <ion-icon name="game-controller-outline" slot="start"></ion-icon>
+            <fa-icon [icon]="['fas', 'gamepad']" slot="start"></fa-icon>
             <ion-label>{{ 'MENU.PLAY' | translate }}</ion-label>
           </ion-item>
         </ion-menu-toggle>
         
         <ion-menu-toggle auto-hide="true">
           <ion-item button routerLink="/create-game" routerDirection="root" routerLinkActive="active-link">
-            <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+            <fa-icon [icon]="['fas', 'plus-circle']" slot="start"></fa-icon>
             <ion-label>{{ 'MENU.CREATE_GAME' | translate }}</ion-label>
           </ion-item>
         </ion-menu-toggle>
         
         <ion-menu-toggle auto-hide="true">
           <ion-item button routerLink="/settings" routerDirection="root" routerLinkActive="active-link">
-            <ion-icon name="settings-outline" slot="start"></ion-icon>
+            <fa-icon [icon]="['fas', 'cog']" slot="start"></fa-icon>
             <ion-label>{{ 'MENU.SETTINGS' | translate }}</ion-label>
           </ion-item>
         </ion-menu-toggle>
