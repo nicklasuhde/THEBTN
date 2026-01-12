@@ -252,7 +252,7 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
 
   // Mark answer as incorrect
   async markIncorrect() {
-    if (this.buzzedPlayer && this.currentQuestion) {
+    if (this.buzzedPlayer && this.currentQuestion && this.currentCategory) {
       // Subtract points (but not below 0)
       const playerScore = this.playerScores.find(ps => ps.player.id === this.buzzedPlayer!.id);
       if (playerScore) {
@@ -261,20 +261,11 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
       
       this.showToast(`${this.buzzedPlayer.name} -${this.currentQuestion.points} poäng!`);
       
-      // Turn off the LED for the player who got it wrong
-      try {
-        await this.bleService.setLedOff(this.buzzedPlayer.buttonIdentifier);
-      } catch (error) {
-        console.error('Failed to turn off LED:', error);
-      }
+      // Mark question as answered/consumed since answer was already shown
+      this.answeredQuestions.add(`${this.currentCategory.id}-${this.currentQuestion.id}`);
       
-      // Go back to waiting for buzzer (someone else can try)
-      this.buzzedPlayer = null;
-      this.showAnswer = false;
-      this.gameState = 'question';
-      
-      // Restart countdown for next attempt
-      this.startCountdown();
+      // Return to board (this will also turn off LEDs)
+      await this.returnToBoard();
     }
   }
 
