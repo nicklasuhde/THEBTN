@@ -8,6 +8,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'play/category/:id',
+    loadComponent: () => import('./game-play/category-play/category-play.page').then((m) => m.CategoryPlayPage),
+    canActivate: [authGuard]
+  },
+  {
     path: 'create-game',
     loadComponent: () => import('./create-game/create-game.page').then((m) => m.CreateGamePage),
     canActivate: [authGuard]

@@ -3,10 +3,9 @@ import { BehaviorSubject } from 'rxjs';
 
 export interface Player {
   id: number;
-  buttonId: number; // The ESP-NOW button ID (0 = master, 1+ = clients)
+  buttonIdentifier: string; // Unique identifier for the button
   name: string;
   isConnected: boolean;
-  isMaster: boolean;
 }
 
 @Injectable({
@@ -21,33 +20,10 @@ export class PlayerService {
 
   constructor() {}
 
-  // Called when master button connects
-  registerMasterButton(): Player {
-    // Check if master already exists
-    const existingMaster = this.players.find(p => p.isMaster);
-    if (existingMaster) {
-      existingMaster.isConnected = true;
-      this.emitPlayers();
-      return existingMaster;
-    }
-
-    const player: Player = {
-      id: this.nextPlayerId++,
-      buttonId: 0, // Master is always button 0
-      name: `Spelare 1`,
-      isConnected: true,
-      isMaster: true
-    };
-    
-    this.players.push(player);
-    this.emitPlayers();
-    return player;
-  }
-
-  // Called when a client button is detected via ESP-NOW
-  registerClientButton(buttonId: number): Player {
+  // Register a button by its unique identifier
+  registerButton(buttonIdentifier: string): Player {
     // Check if this button already exists
-    const existingPlayer = this.players.find(p => p.buttonId === buttonId);
+    const existingPlayer = this.players.find(p => p.buttonIdentifier === buttonIdentifier);
     if (existingPlayer) {
       existingPlayer.isConnected = true;
       this.emitPlayers();
@@ -57,10 +33,9 @@ export class PlayerService {
     const playerNumber = this.players.length + 1;
     const player: Player = {
       id: this.nextPlayerId++,
-      buttonId: buttonId,
+      buttonIdentifier: buttonIdentifier,
       name: `Spelare ${playerNumber}`,
-      isConnected: true,
-      isMaster: false
+      isConnected: true
     };
     
     this.players.push(player);
@@ -77,9 +52,9 @@ export class PlayerService {
     }
   }
 
-  // Get player by button ID
-  getPlayerByButtonId(buttonId: number): Player | undefined {
-    return this.players.find(p => p.buttonId === buttonId);
+  // Get player by button identifier
+  getPlayerByButtonIdentifier(buttonIdentifier: string): Player | undefined {
+    return this.players.find(p => p.buttonIdentifier === buttonIdentifier);
   }
 
   // Get all connected players
@@ -92,8 +67,8 @@ export class PlayerService {
     return [...this.players];
   }
 
-  // Mark master as disconnected
-  disconnectMaster(): void {
+  // Mark all players as disconnected
+  disconnectAll(): void {
     this.players.forEach(p => p.isConnected = false);
     this.emitPlayers();
   }
@@ -106,8 +81,8 @@ export class PlayerService {
   }
 
   // Handle button press - returns the player who pressed
-  handleButtonPress(buttonId: number): Player | undefined {
-    return this.getPlayerByButtonId(buttonId);
+  handleButtonPress(buttonIdentifier: string): Player | undefined {
+    return this.getPlayerByButtonIdentifier(buttonIdentifier);
   }
 
   private emitPlayers(): void {

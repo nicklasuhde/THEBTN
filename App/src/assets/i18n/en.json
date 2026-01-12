@@ -111,6 +111,25 @@
       "ALL": "All"
     }
   },
+  "GAME_PLAY": {
+    "GAME_NOT_FOUND": "Game not found",
+    "BACK_TO_MENU": "Back to menu",
+    "POINTS": "points",
+    "WAITING_FOR_BUZZER": "Waiting for buzzer...",
+    "CLOSE_QUESTION": "Close question",
+    "BUZZED_IN": "buzzed in!",
+    "SHOW_ANSWER": "Show answer",
+    "QUESTION": "Question",
+    "ANSWER": "Answer",
+    "CORRECT": "Correct",
+    "INCORRECT": "Incorrect",
+    "SKIP": "Skip",
+    "GAME_OVER": "Game Over!",
+    "WINS_WITH": "wins with",
+    "EXIT_CONFIRM": "Exit game?",
+    "EXIT_MESSAGE": "Are you sure you want to exit the game? All progress will be lost.",
+    "EXIT": "Exit"
+  },
   "EDITOR": {
     "GAME_NAME": "Game Name",
     "GAME_NAME_PLACEHOLDER": "Enter a name for your game",

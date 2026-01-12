@@ -105,10 +105,9 @@
             @for (player of players; track player.id) {
               <ion-item>
                 <fa-icon 
-                  [icon]="player.isMaster ? ['fas', 'crown'] : ['fas', 'user']" 
+                  [icon]="['fas', 'user']" 
                   slot="start"
-                  [class.text-warning]="player.isMaster"
-                  [class.text-primary]="!player.isMaster"
+                  class="text-primary"
                 ></fa-icon>
                 
                 @if (editingPlayerId === player.id) {
@@ -128,7 +127,6 @@
                 } @else {
                   <ion-label>
                     <h2>{{ player.name }}</h2>
-                    <p>{{ 'PLAYERS.BUTTON' | translate }} {{ player.buttonId }}</p>
                   </ion-label>
                   <ion-button fill="clear" slot="end" (click)="startEditPlayer(player)">
                     <fa-icon [icon]="['fas', 'pen']"></fa-icon>
@@ -225,7 +223,7 @@
                 <fa-icon [icon]="['fas', 'bolt']" class="text-warning"></fa-icon>
               </div>
               <ion-label>
-                <h3 class="log-button-id">{{ 'LOG.BUTTON' | translate }} {{ event.buttonId }}</h3>
+                <h3 class="log-button-id">{{ 'LOG.BUTTON_PRESS' | translate }}</h3>
                 <p class="log-time">{{ formatTime(event.timestamp) }}</p>
               </ion-label>
             </ion-item>

@@ -4,8 +4,7 @@ import { Subject, BehaviorSubject } from 'rxjs';
 
 export interface ButtonPressEvent {
   timestamp: Date;
-  deviceId: string;
-  buttonId: number;
+  buttonIdentifier: string; // Unique identifier for the button
   data: string;
 }
 
@@ -29,12 +28,25 @@ export class BleService {
   private connectionStateSubject = new BehaviorSubject<boolean>(false);
   public connectionState$ = this.connectionStateSubject.asObservable();
 
-  // Track registered button IDs
-  private registeredButtons = new Set<number>();
-  private buttonRegistrationSubject = new Subject<number>();
+  // Track registered button identifiers
+  private registeredButtons = new Set<string>();
+  private buttonRegistrationSubject = new Subject<string>();
   public buttonRegistration$ = this.buttonRegistrationSubject.asObservable();
 
+  // Control flag for button registration - only allow on play page, not during games
+  private registrationEnabled = false;
+
   constructor() {}
+
+  // Enable/disable button registration
+  setRegistrationEnabled(enabled: boolean): void {
+    this.registrationEnabled = enabled;
+    console.log('Button registration enabled:', enabled);
+  }
+
+  isRegistrationEnabled(): boolean {
+    return this.registrationEnabled;
+  }
 
   async initialize(): Promise<void> {
     try {
@@ -110,14 +122,7 @@ export class BleService {
       this.connectedDevice = device;
       this.connectionStateSubject.next(true);
       
-      // Register master button (button 0) on connect
-      if (!this.registeredButtons.has(0)) {
-        this.registeredButtons.add(0);
-        this.buttonRegistrationSubject.next(0);
-        console.log('Master button registered: 0');
-      }
-      
-      console.log('Connected to device:', device.name);
+      console.log('Connected to device:', device.name, 'deviceId:', device.deviceId);
 
       // Subscribe to button press notifications
       await this.subscribeToButtonPresses();
@@ -139,12 +144,14 @@ export class BleService {
         this.STATUS_UUID,
         (value) => {
           const data = this.dataViewToString(value);
-          const buttonId = this.parseButtonId(data);
+          const deviceId = this.connectedDevice?.deviceId || 'unknown';
+          
+          // Parse the data to get button identifier
+          const buttonIdentifier = this.parseButtonIdentifier(data, deviceId);
           
           const event: ButtonPressEvent = {
             timestamp: new Date(),
-            deviceId: this.connectedDevice?.deviceId || 'unknown',
-            buttonId: buttonId,
+            buttonIdentifier: buttonIdentifier,
             data: data
           };
 
@@ -152,10 +159,11 @@ export class BleService {
           console.log('Button press received:', event);
 
           // Check if this is a new button we haven't seen before
-          if (!this.registeredButtons.has(buttonId)) {
-            this.registeredButtons.add(buttonId);
-            this.buttonRegistrationSubject.next(buttonId);
-            console.log('New button registered:', buttonId);
+          // Only register if registration is enabled (on play page, not during game)
+          if (this.registrationEnabled && !this.registeredButtons.has(buttonIdentifier)) {
+            this.registeredButtons.add(buttonIdentifier);
+            this.buttonRegistrationSubject.next(buttonIdentifier);
+            console.log('New button registered:', buttonIdentifier);
           }
 
           // Emit the button press event
@@ -237,16 +245,38 @@ export class BleService {
     return decoder.decode(dataView.buffer);
   }
 
-  private parseButtonId(data: string): number {
-    // Parse button ID from the data - adjust based on your firmware format
-    // Format from firmware: "BTN:X" where X is the button ID
+  private parseButtonIdentifier(data: string, deviceId: string): string {
+    // Parse button data to get a unique identifier
+    // Format from firmware for ESP-NOW clients: "BTN:X" where X is the button ID
+    // BLE device button (BTN:0 or unrecognized data): use deviceId as identifier
+    
+    console.log('Parsing button data:', data, 'raw bytes:', Array.from(data).map(c => c.charCodeAt(0)));
+    
+    // Check for button format "BTN:X"
     const match = data.match(/BTN[:\s]*(\d+)/i);
     if (match) {
-      return parseInt(match[1], 10);
+      const buttonId = parseInt(match[1], 10);
+      // If buttonId is 0, use deviceId (the BLE connected device)
+      if (buttonId === 0) {
+        return deviceId;
+      }
+      // Otherwise use the ESP-NOW button ID
+      return `espnow-${buttonId}`;
     }
+    
     // Try to parse as just a number
-    const num = parseInt(data.trim(), 10);
-    return isNaN(num) ? 0 : num;
+    const trimmed = data.trim();
+    if (/^\d+$/.test(trimmed)) {
+      const buttonId = parseInt(trimmed, 10);
+      if (buttonId === 0) {
+        return deviceId;
+      }
+      return `espnow-${buttonId}`;
+    }
+    
+    // Any other data - use deviceId as identifier
+    console.log('Using deviceId as identifier:', deviceId);
+    return deviceId;
   }
 }
 

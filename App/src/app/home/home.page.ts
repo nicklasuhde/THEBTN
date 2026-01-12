@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -93,54 +93,62 @@ export class HomePage implements OnInit, OnDestroy {
     private alertController: AlertController,
     private toastController: ToastController,
     private translate: TranslateService,
-    private router: Router
+    private router: Router,
+    private ngZone: NgZone
   ) {}
 
   async ngOnInit() {
     await this.initializeBle();
     await this.loadGames();
     this.setupSubscriptions();
+    
+    // Enable button registration on the play page
+    this.bleService.setRegistrationEnabled(true);
   }
 
   private setupSubscriptions() {
     // Subscribe to player changes
     this.subscriptions.push(
       this.playerService.players$.subscribe(players => {
-        this.players = players;
+        this.ngZone.run(() => {
+          this.players = players;
+        });
       })
     );
 
     // Subscribe to button registrations
     this.subscriptions.push(
-      this.bleService.buttonRegistration$.subscribe(buttonId => {
-        if (buttonId === 0) {
-          this.playerService.registerMasterButton();
-        } else {
-          this.playerService.registerClientButton(buttonId);
-        }
-        this.showToast(
-          this.translate.instant('PLAYERS.NEW_PLAYER_CONNECTED', { id: buttonId })
-        );
+      this.bleService.buttonRegistration$.subscribe(buttonIdentifier => {
+        this.ngZone.run(() => {
+          const player = this.playerService.registerButton(buttonIdentifier);
+          this.showToast(
+            this.translate.instant('PLAYERS.NEW_PLAYER_CONNECTED', { id: player.name })
+          );
+        });
       })
     );
 
     // Subscribe to button presses
     this.subscriptions.push(
       this.bleService.buttonPress$.subscribe(event => {
-        const player = this.playerService.getPlayerByButtonId(event.buttonId);
-        if (player) {
-          console.log(`Button press from: ${player.name} (Button ${event.buttonId})`);
-        }
-        this.buttonPressLog = this.bleService.getButtonPressLog();
+        this.ngZone.run(() => {
+          const player = this.playerService.getPlayerByButtonIdentifier(event.buttonIdentifier);
+          if (player) {
+            console.log(`Button press from: ${player.name} (${event.buttonIdentifier})`);
+          }
+          this.buttonPressLog = this.bleService.getButtonPressLog();
+        });
       })
     );
 
     // Subscribe to connection state
     this.subscriptions.push(
       this.bleService.connectionState$.subscribe(isConnected => {
-        if (!isConnected) {
-          this.playerService.disconnectMaster();
-        }
+        this.ngZone.run(() => {
+          if (!isConnected) {
+            this.playerService.disconnectAll();
+          }
+        });
       })
     );
   }
@@ -180,6 +188,8 @@ export class HomePage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+    // Disable button registration when leaving the play page
+    this.bleService.setRegistrationEnabled(false);
     this.bleService.disconnect();
   }
 
@@ -280,19 +290,33 @@ export class HomePage implements OnInit, OnDestroy {
       return;
     }
 
-    // TODO: Navigate to game play screen with selected game and players
+    // Disable button registration when starting a game
+    this.bleService.setRegistrationEnabled(false);
+
     await this.showToast(
       this.translate.instant('PLAY.STARTING_GAME', { name: this.selectedGame.name })
     );
     
-    // For now, just show alert - implement game play screen later
-    await this.showAlert(
-      this.translate.instant('PLAY.GAME_READY'),
-      this.translate.instant('PLAY.GAME_READY_MSG', { 
-        game: this.selectedGame.name,
-        players: this.players.map(p => p.name).join(', ')
-      })
-    );
+    // Navigate to the appropriate game play screen based on game type
+    switch (this.selectedGame.type) {
+      case 'category':
+        this.router.navigate(['/play/category', this.selectedGame.id]);
+        break;
+      case 'quiz':
+        // TODO: Implement quiz game play
+        await this.showAlert(
+          this.translate.instant('PLAY.GAME_READY'),
+          'Quiz-spelläget är inte implementerat ännu'
+        );
+        break;
+      case 'wheel':
+        // TODO: Implement wheel game play
+        await this.showAlert(
+          this.translate.instant('PLAY.GAME_READY'),
+          'Lyckohjul-spelläget är inte implementerat ännu'
+        );
+        break;
+    }
   }
 
   handleRefresh(event: any) {

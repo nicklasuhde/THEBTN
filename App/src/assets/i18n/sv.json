@@ -111,6 +111,25 @@
       "ALL": "Alla"
     }
   },
+  "GAME_PLAY": {
+    "GAME_NOT_FOUND": "Spelet kunde inte hittas",
+    "BACK_TO_MENU": "Tillbaka till menyn",
+    "POINTS": "poäng",
+    "WAITING_FOR_BUZZER": "Väntar på knapptryckning...",
+    "CLOSE_QUESTION": "Stäng frågan",
+    "BUZZED_IN": "tryckte först!",
+    "SHOW_ANSWER": "Visa svar",
+    "QUESTION": "Fråga",
+    "ANSWER": "Svar",
+    "CORRECT": "Rätt",
+    "INCORRECT": "Fel",
+    "SKIP": "Hoppa över",
+    "GAME_OVER": "Spelet är slut!",
+    "WINS_WITH": "vinner med",
+    "EXIT_CONFIRM": "Avsluta spelet?",
+    "EXIT_MESSAGE": "Är du säker på att du vill avsluta spelet? All progress kommer förloras.",
+    "EXIT": "Avsluta"
+  },
   "EDITOR": {
     "GAME_NAME": "Spelnamn",
     "GAME_NAME_PLACEHOLDER": "Ange ett namn för ditt spel",

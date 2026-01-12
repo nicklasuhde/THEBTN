@@ -1,0 +1,197 @@
+<ion-content [fullscreen]="true" class="game-content" [scrollY]="false">
+  @if (isLoading) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  } @else if (!game) {
+    <div class="error-container">
+      <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+      <p>{{ 'GAME_PLAY.GAME_NOT_FOUND' | translate }}</p>
+      <ion-button (click)="exitGame()">
+        {{ 'GAME_PLAY.BACK_TO_MENU' | translate }}
+      </ion-button>
+    </div>
+  } @else {
+    <!-- Main Game Container -->
+    <div class="game-container">
+      
+      <!-- Game Board View -->
+      @if (gameState === 'board') {
+        <div class="board-view">
+          <!-- Header with exit button -->
+          <div class="game-header">
+            <button class="exit-btn" (click)="exitGame()">
+              <fa-icon [icon]="['fas', 'times']"></fa-icon>
+            </button>
+            <h1 class="game-title">{{ game.name }}</h1>
+          </div>
+          
+          <!-- Category Board -->
+          <div class="category-board">
+            <!-- Category Headers -->
+            <div class="category-headers">
+              @for (category of game.categories; track category.id) {
+                <div class="category-header">
+                  {{ category.name }}
+                </div>
+              }
+            </div>
+            
+            <!-- Question Grid -->
+            <div class="questions-grid">
+              @for (points of getPointValues(); track points) {
+                <div class="question-row">
+                  @for (category of game.categories; track category.id) {
+                    @let question = getQuestionByPoints(category, points);
+                    @if (question) {
+                      <button 
+                        class="question-card"
+                        [class.answered]="isQuestionAnswered(category, question)"
+                        [class.empty]="!question.question"
+                        [disabled]="isQuestionAnswered(category, question) || !question.question"
+                        (click)="selectQuestion(category, question)"
+                      >
+                        @if (!isQuestionAnswered(category, question) && question.question) {
+                          <span class="points-value">{{ points }}</span>
+                        }
+                      </button>
+                    }
+                  }
+                </div>
+              }
+            </div>
+          </div>
+          
+          <!-- Player Scores Footer -->
+          <div class="scores-footer">
+            @for (ps of playerScores; track ps.player.id) {
+              <div class="player-score">
+                <span class="player-name">{{ ps.player.name }}</span>
+                <span class="player-points">{{ ps.score }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+      
+      <!-- Question View -->
+      @if (gameState === 'question') {
+        <div class="question-view">
+          <div class="question-header">
+            <span class="category-name">{{ currentCategory?.name }}</span>
+            <span class="question-points">{{ currentQuestion?.points }} {{ 'GAME_PLAY.POINTS' | translate }}</span>
+          </div>
+          
+          <div class="question-content">
+            <p class="question-text">{{ currentQuestion?.question }}</p>
+          </div>
+          
+          <div class="waiting-buzzer">
+            <fa-icon [icon]="['fas', 'bell']" class="buzzer-icon pulse"></fa-icon>
+            <p>{{ 'GAME_PLAY.WAITING_FOR_BUZZER' | translate }}</p>
+          </div>
+          
+          <div class="question-actions">
+            <ion-button color="medium" fill="outline" (click)="closeQuestion()">
+              <fa-icon [icon]="['fas', 'times']" slot="start"></fa-icon>
+              {{ 'GAME_PLAY.CLOSE_QUESTION' | translate }}
+            </ion-button>
+          </div>
+          
+          <!-- Player Scores Footer -->
+          <div class="scores-footer">
+            @for (ps of playerScores; track ps.player.id) {
+              <div class="player-score">
+                <span class="player-name">{{ ps.player.name }}</span>
+                <span class="player-points">{{ ps.score }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+      
+      <!-- Buzzer View (Someone pressed the button) -->
+      @if (gameState === 'buzzer') {
+        <div class="buzzer-view">
+          <div class="question-header">
+            <span class="category-name">{{ currentCategory?.name }}</span>
+            <span class="question-points">{{ currentQuestion?.points }} {{ 'GAME_PLAY.POINTS' | translate }}</span>
+          </div>
+          
+          <div class="question-content">
+            <p class="question-text">{{ currentQuestion?.question }}</p>
+          </div>
+          
+          <div class="buzzed-player">
+            <fa-icon [icon]="['fas', 'hand-point-up']" class="hand-icon"></fa-icon>
+            <h2>{{ buzzedPlayer?.name }}</h2>
+            <p>{{ 'GAME_PLAY.BUZZED_IN' | translate }}</p>
+          </div>
+          
+          <div class="buzzer-actions">
+            <ion-button color="primary" size="large" (click)="revealAnswer()">
+              <fa-icon [icon]="['fas', 'eye']" slot="start"></fa-icon>
+              {{ 'GAME_PLAY.SHOW_ANSWER' | translate }}
+            </ion-button>
+          </div>
+          
+          <!-- Player Scores Footer -->
+          <div class="scores-footer">
+            @for (ps of playerScores; track ps.player.id) {
+              <div class="player-score" 
+                   [class.active]="ps.player.id === buzzedPlayer?.id">
+                <span class="player-name">{{ ps.player.name }}</span>
+                <span class="player-points">{{ ps.score }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+      
+      <!-- Answer View -->
+      @if (gameState === 'answer') {
+        <div class="answer-view">
+          <div class="question-header">
+            <span class="category-name">{{ currentCategory?.name }}</span>
+            <span class="question-points">{{ currentQuestion?.points }} {{ 'GAME_PLAY.POINTS' | translate }}</span>
+          </div>
+          
+          <div class="question-content small">
+            <p class="question-label">{{ 'GAME_PLAY.QUESTION' | translate }}:</p>
+            <p class="question-text">{{ currentQuestion?.question }}</p>
+          </div>
+          
+          <div class="answer-content">
+            <p class="answer-label">{{ 'GAME_PLAY.ANSWER' | translate }}:</p>
+            <p class="answer-text">{{ currentQuestion?.answer }}</p>
+          </div>
+          
+          <div class="answer-actions">
+            <ion-button color="success" size="large" (click)="markCorrect()">
+              <fa-icon [icon]="['fas', 'check']" slot="start"></fa-icon>
+              {{ 'GAME_PLAY.CORRECT' | translate }}
+            </ion-button>
+            <ion-button color="danger" size="large" (click)="markIncorrect()">
+              <fa-icon [icon]="['fas', 'times']" slot="start"></fa-icon>
+              {{ 'GAME_PLAY.INCORRECT' | translate }}
+            </ion-button>
+            <ion-button color="medium" fill="outline" (click)="markQuestionDone()">
+              {{ 'GAME_PLAY.SKIP' | translate }}
+            </ion-button>
+          </div>
+          
+          <!-- Player Scores Footer -->
+          <div class="scores-footer">
+            @for (ps of playerScores; track ps.player.id) {
+              <div class="player-score" 
+                   [class.active]="ps.player.id === buzzedPlayer?.id">
+                <span class="player-name">{{ ps.player.name }}</span>
+                <span class="player-points">{{ ps.score }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</ion-content>
