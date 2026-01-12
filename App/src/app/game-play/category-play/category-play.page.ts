@@ -176,7 +176,6 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
       this.answeredQuestions.add(`${this.currentCategory.id}-${this.currentQuestion.id}`);
     }
     
-    this.showToast(this.translate.instant('GAME_PLAY.TIME_UP') || 'Tiden är ute!');
     this.returnToBoard();
   }
 
