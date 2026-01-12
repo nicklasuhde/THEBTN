@@ -224,6 +224,62 @@ export class BleService {
     console.log('Command sent:', command);
   }
 
+  /**
+   * Turn on LED for a specific button
+   * @param buttonIdentifier The button identifier (e.g., "espnow-123" or deviceId)
+   */
+  async setLedOn(buttonIdentifier: string): Promise<void> {
+    const buttonId = this.extractButtonId(buttonIdentifier);
+    await this.sendCommand(`LED:${buttonId}:1`);
+    console.log(`LED ON command sent for button ${buttonId}`);
+  }
+
+  /**
+   * Turn off LED for a specific button
+   * @param buttonIdentifier The button identifier (e.g., "espnow-123" or deviceId)
+   */
+  async setLedOff(buttonIdentifier: string): Promise<void> {
+    const buttonId = this.extractButtonId(buttonIdentifier);
+    await this.sendCommand(`LED:${buttonId}:0`);
+    console.log(`LED OFF command sent for button ${buttonId}`);
+  }
+
+  /**
+   * Turn off all button LEDs
+   */
+  async setAllLedsOff(): Promise<void> {
+    await this.sendCommand('LED:0:0');
+    console.log('All LEDs OFF command sent');
+  }
+
+  /**
+   * Extract numeric button ID from button identifier
+   */
+  private extractButtonId(buttonIdentifier: string): number {
+    // Check for "espnow-XXX" format
+    const espnowMatch = buttonIdentifier.match(/espnow-(\d+)/i);
+    if (espnowMatch) {
+      return parseInt(espnowMatch[1], 10);
+    }
+    
+    // If it's a deviceId (BLE master device), use 0 as a special ID
+    // The firmware will recognize 0 as the master device
+    if (buttonIdentifier.includes('-') || buttonIdentifier.length > 10) {
+      // Looks like a UUID/deviceId - this is the master device
+      // We need to get the master's button ID - for now use a hash
+      let hash = 0;
+      for (let i = 0; i < buttonIdentifier.length; i++) {
+        hash = ((hash << 5) - hash) + buttonIdentifier.charCodeAt(i);
+        hash = hash & 0xFF; // Keep it to 8 bits
+      }
+      return hash || 1; // Avoid 0 since that means "all"
+    }
+    
+    // Try to parse as number directly
+    const num = parseInt(buttonIdentifier, 10);
+    return isNaN(num) ? 0 : num;
+  }
+
   getButtonPressLog(): ButtonPressEvent[] {
     return this.buttonPressLog;
   }

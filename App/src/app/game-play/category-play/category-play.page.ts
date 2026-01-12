@@ -131,7 +131,7 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
     );
   }
 
-  private handleButtonPress(event: ButtonPressEvent) {
+  private async handleButtonPress(event: ButtonPressEvent) {
     // Only react to button presses when waiting for buzzer
     if (this.gameState === 'question') {
       const player = this.playerService.getPlayerByButtonIdentifier(event.buttonIdentifier);
@@ -139,6 +139,13 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
         this.stopCountdown();
         this.buzzedPlayer = player;
         this.gameState = 'buzzer';
+        
+        // Turn on LED for the player who buzzed in
+        try {
+          await this.bleService.setLedOn(player.buttonIdentifier);
+        } catch (error) {
+          console.error('Failed to turn on LED:', error);
+        }
       }
     }
   }
@@ -201,8 +208,16 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
   }
 
   // Close question without answering (no one knows the answer)
-  closeQuestion() {
+  async closeQuestion() {
     this.stopCountdown();
+    
+    // Turn off all LEDs
+    try {
+      await this.bleService.setAllLedsOff();
+    } catch (error) {
+      console.error('Failed to turn off LEDs:', error);
+    }
+    
     this.gameState = 'board';
     this.currentQuestion = null;
     this.currentCategory = null;
@@ -236,7 +251,7 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
   }
 
   // Mark answer as incorrect
-  markIncorrect() {
+  async markIncorrect() {
     if (this.buzzedPlayer && this.currentQuestion) {
       // Subtract points (but not below 0)
       const playerScore = this.playerScores.find(ps => ps.player.id === this.buzzedPlayer!.id);
@@ -245,6 +260,13 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
       }
       
       this.showToast(`${this.buzzedPlayer.name} -${this.currentQuestion.points} poäng!`);
+      
+      // Turn off the LED for the player who got it wrong
+      try {
+        await this.bleService.setLedOff(this.buzzedPlayer.buttonIdentifier);
+      } catch (error) {
+        console.error('Failed to turn off LED:', error);
+      }
       
       // Go back to waiting for buzzer (someone else can try)
       this.buzzedPlayer = null;
@@ -262,8 +284,16 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
   }
 
   // Return to board after a question
-  private returnToBoard() {
+  private async returnToBoard() {
     this.stopCountdown();
+    
+    // Turn off all LEDs when returning to board
+    try {
+      await this.bleService.setAllLedsOff();
+    } catch (error) {
+      console.error('Failed to turn off LEDs:', error);
+    }
+    
     this.gameState = 'board';
     this.currentQuestion = null;
     this.currentCategory = null;

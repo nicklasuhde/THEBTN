@@ -3,11 +3,13 @@
 #define SERVICE_UUID "12345678-1234-1234-1234-1234567890ab"
 #define CMD_UUID     "abcd"
 #define STATUS_UUID  "dcba"
+#define LED_PIN      26
 
 BleManager Ble;
 NimBLECharacteristic* statusChar;
 NimBLEServer* pServer;
 bool deviceConnected = false;
+LedCommandCallback ledCallback = nullptr;
 
 class ServerCallbacks : public NimBLEServerCallbacks {
   void onConnect(NimBLEServer* server, NimBLEConnInfo& connInfo) override {
@@ -30,6 +32,34 @@ class CmdCallback : public NimBLECharacteristicCallbacks {
   
     if (cmd == "UPDATE") {
       // TODO: trigga OTA
+      return;
+    }
+    
+    // LED command format: "LED:buttonId:state"
+    // Examples: "LED:123:1" (turn on LED for button 123)
+    //           "LED:123:0" (turn off LED for button 123)
+    //           "LED:0:0"   (turn off all LEDs)
+    if (cmd.rfind("LED:", 0) == 0) {
+      // Parse the command
+      int firstColon = cmd.find(':', 4);
+      if (firstColon != std::string::npos) {
+        std::string buttonIdStr = cmd.substr(4, firstColon - 4);
+        std::string stateStr = cmd.substr(firstColon + 1);
+        
+        uint8_t buttonId = (uint8_t)atoi(buttonIdStr.c_str());
+        bool ledOn = (stateStr == "1" || stateStr == "ON" || stateStr == "on");
+        
+        Serial.print("LED command parsed - Button: ");
+        Serial.print(buttonId);
+        Serial.print(", State: ");
+        Serial.println(ledOn ? "ON" : "OFF");
+        
+        // Call the callback if set
+        if (ledCallback != nullptr) {
+          ledCallback(buttonId, ledOn);
+        }
+      }
+      return;
     }
   }
 };
@@ -78,4 +108,12 @@ void BleManager::notifyButtonPress(uint8_t buttonId) {
   } else {
     Serial.println("Cannot notify - no BLE client connected");
   }
+}
+
+void BleManager::setLedCommandCallback(LedCommandCallback callback) {
+  ledCallback = callback;
+}
+
+void BleManager::setLocalLed(bool on) {
+  digitalWrite(LED_PIN, on ? HIGH : LOW);
 }
