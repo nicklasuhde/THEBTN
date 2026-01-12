@@ -33,7 +33,7 @@ import { GameService } from '../services/game.service';
 import { Game, GameType } from '../models/game.models';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Router, RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, pairwise, startWith } from 'rxjs';
 import { IconName, IconPrefix } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
@@ -141,12 +141,17 @@ export class HomePage implements OnInit, OnDestroy {
       })
     );
 
-    // Subscribe to connection state
+    // Subscribe to connection state - only react when transitioning from connected to disconnected
     this.subscriptions.push(
-      this.bleService.connectionState$.subscribe(isConnected => {
+      this.bleService.connectionState$.pipe(
+        startWith(false),
+        pairwise()
+      ).subscribe(([wasConnected, isConnected]) => {
         this.ngZone.run(() => {
-          if (!isConnected) {
-            this.playerService.disconnectAll();
+          // Only clear when actually disconnecting (was connected, now not)
+          if (wasConnected && !isConnected) {
+            this.bleService.clearRegisteredButtons();
+            this.playerService.clearPlayers();
           }
         });
       })

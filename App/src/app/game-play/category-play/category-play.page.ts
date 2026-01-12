@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -70,16 +70,13 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
     private playerService: PlayerService,
     private alertController: AlertController,
     private toastController: ToastController,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private ngZone: NgZone
   ) {}
 
   async ngOnInit() {
     // Lock to landscape mode
-    try {
-      await ScreenOrientation.lock({ orientation: 'landscape' });
-    } catch (e) {
-      console.log('Could not lock orientation:', e);
-    }
+ 
     
     // Ensure button registration is disabled during game play
     this.bleService.setRegistrationEnabled(false);
@@ -89,15 +86,11 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
     this.setupSubscriptions();
   }
 
-  async ngOnDestroy() {
+  ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
     
-    // Unlock orientation when leaving
-    try {
-      await ScreenOrientation.unlock();
-    } catch (e) {
-      console.log('Could not unlock orientation:', e);
-    }
+    // Unlock orientation when leaving (fire and forget)
+    this.unlockOrientation();
   }
 
   private async loadGame() {
@@ -126,7 +119,9 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
     // Subscribe to button presses
     this.subscriptions.push(
       this.bleService.buttonPress$.subscribe(event => {
-        this.handleButtonPress(event);
+        this.ngZone.run(() => {
+          this.handleButtonPress(event);
+        });
       })
     );
   }
@@ -263,7 +258,8 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
       buttons: [
         {
           text: this.translate.instant('GAME_PLAY.BACK_TO_MENU'),
-          handler: () => {
+          handler: async () => {
+            await this.unlockOrientation();
             this.router.navigate(['/play']);
           }
         }
@@ -286,13 +282,22 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
         {
           text: this.translate.instant('GAME_PLAY.EXIT'),
           role: 'destructive',
-          handler: () => {
+          handler: async () => {
+            await this.unlockOrientation();
             this.router.navigate(['/play']);
           }
         }
       ]
     });
     await alert.present();
+  }
+
+  private async unlockOrientation() {
+    try {
+      await ScreenOrientation.unlock();
+    } catch (e) {
+      console.log('Could not unlock orientation:', e);
+    }
   }
 
   private async showToast(message: string) {

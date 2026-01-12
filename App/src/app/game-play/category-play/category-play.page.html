@@ -51,8 +51,10 @@
                         [disabled]="isQuestionAnswered(category, question) || !question.question"
                         (click)="selectQuestion(category, question)"
                       >
-                        @if (!isQuestionAnswered(category, question) && question.question) {
-                          <span class="points-value">{{ points }}</span>
+                        @if (question.question) {
+                          <span class="points-value" [class.used]="isQuestionAnswered(category, question)">
+                            {{ points }}
+                          </span>
                         }
                       </button>
                     }
@@ -98,15 +100,6 @@
             </ion-button>
           </div>
           
-          <!-- Player Scores Footer -->
-          <div class="scores-footer">
-            @for (ps of playerScores; track ps.player.id) {
-              <div class="player-score">
-                <span class="player-name">{{ ps.player.name }}</span>
-                <span class="player-points">{{ ps.score }}</span>
-              </div>
-            }
-          </div>
         </div>
       }
       
@@ -135,16 +128,6 @@
             </ion-button>
           </div>
           
-          <!-- Player Scores Footer -->
-          <div class="scores-footer">
-            @for (ps of playerScores; track ps.player.id) {
-              <div class="player-score" 
-                   [class.active]="ps.player.id === buzzedPlayer?.id">
-                <span class="player-name">{{ ps.player.name }}</span>
-                <span class="player-points">{{ ps.score }}</span>
-              </div>
-            }
-          </div>
         </div>
       }
       
@@ -167,28 +150,17 @@
           </div>
           
           <div class="answer-actions">
-            <ion-button color="success" size="large" (click)="markCorrect()">
+            <ion-button color="success" (click)="markCorrect()">
               <fa-icon [icon]="['fas', 'check']" slot="start"></fa-icon>
               {{ 'GAME_PLAY.CORRECT' | translate }}
             </ion-button>
-            <ion-button color="danger" size="large" (click)="markIncorrect()">
+            <ion-button color="danger" (click)="markIncorrect()">
               <fa-icon [icon]="['fas', 'times']" slot="start"></fa-icon>
               {{ 'GAME_PLAY.INCORRECT' | translate }}
             </ion-button>
             <ion-button color="medium" fill="outline" (click)="markQuestionDone()">
               {{ 'GAME_PLAY.SKIP' | translate }}
             </ion-button>
-          </div>
-          
-          <!-- Player Scores Footer -->
-          <div class="scores-footer">
-            @for (ps of playerScores; track ps.player.id) {
-              <div class="player-score" 
-                   [class.active]="ps.player.id === buzzedPlayer?.id">
-                <span class="player-name">{{ ps.player.name }}</span>
-                <span class="player-points">{{ ps.score }}</span>
-              </div>
-            }
           </div>
         </div>
       }
