@@ -60,6 +60,11 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
   // Track answered questions
   answeredQuestions: Set<string> = new Set();
   
+  // Countdown timer
+  countdown: number = 10;
+  private countdownInterval: ReturnType<typeof setInterval> | null = null;
+  private readonly COUNTDOWN_SECONDS = 10;
+  
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -75,8 +80,7 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
-    // Lock to landscape mode
- 
+
     
     // Ensure button registration is disabled during game play
     this.bleService.setRegistrationEnabled(false);
@@ -88,6 +92,7 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.stopCountdown();
     
     // Unlock orientation when leaving (fire and forget)
     this.unlockOrientation();
@@ -131,10 +136,48 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
     if (this.gameState === 'question') {
       const player = this.playerService.getPlayerByButtonIdentifier(event.buttonIdentifier);
       if (player) {
+        this.stopCountdown();
         this.buzzedPlayer = player;
         this.gameState = 'buzzer';
       }
     }
+  }
+
+  // Start the countdown timer
+  private startCountdown() {
+    this.countdown = this.COUNTDOWN_SECONDS;
+    this.stopCountdown(); // Clear any existing interval
+    
+    this.countdownInterval = setInterval(() => {
+      this.ngZone.run(() => {
+        this.countdown--;
+        
+        if (this.countdown <= 0) {
+          this.onCountdownExpired();
+        }
+      });
+    }, 1000);
+  }
+
+  // Stop the countdown timer
+  private stopCountdown() {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+      this.countdownInterval = null;
+    }
+  }
+
+  // Called when countdown reaches zero
+  private onCountdownExpired() {
+    this.stopCountdown();
+    
+    // Mark question as done (consumed) and return to board
+    if (this.currentCategory && this.currentQuestion) {
+      this.answeredQuestions.add(`${this.currentCategory.id}-${this.currentQuestion.id}`);
+    }
+    
+    this.showToast(this.translate.instant('GAME_PLAY.TIME_UP') || 'Tiden är ute!');
+    this.returnToBoard();
   }
 
   // Check if question has been answered
@@ -153,10 +196,14 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
     this.showAnswer = false;
     this.buzzedPlayer = null;
     this.gameState = 'question';
+    
+    // Start countdown timer
+    this.startCountdown();
   }
 
   // Close question without answering (no one knows the answer)
   closeQuestion() {
+    this.stopCountdown();
     this.gameState = 'board';
     this.currentQuestion = null;
     this.currentCategory = null;
@@ -204,6 +251,9 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
       this.buzzedPlayer = null;
       this.showAnswer = false;
       this.gameState = 'question';
+      
+      // Restart countdown for next attempt
+      this.startCountdown();
     }
   }
 
@@ -214,6 +264,7 @@ export class CategoryPlayPage implements OnInit, OnDestroy {
 
   // Return to board after a question
   private returnToBoard() {
+    this.stopCountdown();
     this.gameState = 'board';
     this.currentQuestion = null;
     this.currentCategory = null;

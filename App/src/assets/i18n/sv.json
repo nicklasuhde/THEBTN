@@ -116,6 +116,8 @@
     "BACK_TO_MENU": "Tillbaka till menyn",
     "POINTS": "poäng",
     "WAITING_FOR_BUZZER": "Väntar på knapptryckning...",
+    "SECONDS_LEFT": "sekunder kvar",
+    "TIME_UP": "Tiden är ute!",
     "CLOSE_QUESTION": "Stäng frågan",
     "BUZZED_IN": "tryckte först!",
     "SHOW_ANSWER": "Visa svar",

@@ -116,6 +116,8 @@
     "BACK_TO_MENU": "Back to menu",
     "POINTS": "points",
     "WAITING_FOR_BUZZER": "Waiting for buzzer...",
+    "SECONDS_LEFT": "seconds left",
+    "TIME_UP": "Time's up!",
     "CLOSE_QUESTION": "Close question",
     "BUZZED_IN": "buzzed in!",
     "SHOW_ANSWER": "Show answer",

@@ -88,9 +88,11 @@
             <p class="question-text">{{ currentQuestion?.question }}</p>
           </div>
           
-          <div class="waiting-buzzer">
-            <fa-icon [icon]="['fas', 'bell']" class="buzzer-icon pulse"></fa-icon>
-            <p>{{ 'GAME_PLAY.WAITING_FOR_BUZZER' | translate }}</p>
+          <div class="countdown-timer">
+            <div class="countdown-circle" [class.warning]="countdown <= 3">
+              <span class="countdown-number">{{ countdown }}</span>
+            </div>
+            <p class="countdown-label">{{ 'GAME_PLAY.SECONDS_LEFT' | translate }}</p>
           </div>
           
           <div class="question-actions">
