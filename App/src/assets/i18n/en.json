@@ -42,5 +42,29 @@
   },
   "LANGUAGE": {
     "SELECT": "Select language"
+  },
+  "AUTH": {
+    "LOGIN": "Log in",
+    "REGISTER": "Create account",
+    "LOGOUT": "Log out",
+    "EMAIL": "Email address",
+    "PASSWORD": "Password",
+    "CONFIRM_PASSWORD": "Confirm password",
+    "FIRST_NAME": "First name",
+    "LAST_NAME": "Last name",
+    "FORGOT_PASSWORD": "Forgot password?",
+    "NO_ACCOUNT": "Don't have an account?",
+    "HAVE_ACCOUNT": "Already have an account?",
+    "CREATE_ACCOUNT": "Create account",
+    "LOGGING_IN": "Logging in...",
+    "REGISTERING": "Creating account...",
+    "RESEND_VERIFICATION": "Resend verification email",
+    "VERIFICATION_SENT": "Verification email sent!",
+    "CHECK_EMAIL": "Check your email to verify your account.",
+    "LOGIN_SUCCESS": "Login successful!",
+    "PASSWORDS_MISMATCH": "Passwords do not match",
+    "WELCOME_BACK": "Welcome back!",
+    "CREATE_YOUR_ACCOUNT": "Create your account",
+    "LOGOUT_CONFIRM": "Are you sure you want to log out?"
   }
 }

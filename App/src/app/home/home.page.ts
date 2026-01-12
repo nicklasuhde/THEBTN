@@ -36,10 +36,13 @@ import {
   refreshOutline,
   gameController,
   globe,
-  language
+  language,
+  logOut
 } from 'ionicons/icons';
+import { Router } from '@angular/router';
 import { BleDevice } from '@capacitor-community/bluetooth-le';
 import { BleService, ButtonPressEvent } from '../services/ble.service';
+import { AuthService } from '../services/auth.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -78,6 +81,8 @@ export class HomePage implements OnInit, OnDestroy {
 
   constructor(
     private bleService: BleService,
+    private authService: AuthService,
+    private router: Router,
     private alertController: AlertController,
     private toastController: ToastController,
     private actionSheetController: ActionSheetController,
@@ -87,6 +92,7 @@ export class HomePage implements OnInit, OnDestroy {
       bluetooth,
       bluetoothOutline,
       search,
+      logOut,
       flash,
       checkmarkCircle,
       closeCircle,
@@ -131,6 +137,27 @@ export class HomePage implements OnInit, OnDestroy {
   getCurrentLanguageFlag(): string {
     const lang = this.translate.currentLang || 'sv';
     return lang === 'sv' ? '🇸🇪' : '🇬🇧';
+  }
+
+  async logout() {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('AUTH.LOGOUT'),
+      message: this.translate.instant('AUTH.LOGOUT_CONFIRM') || 'Are you sure you want to log out?',
+      buttons: [
+        {
+          text: this.translate.instant('ACTIONS.CANCEL'),
+          role: 'cancel'
+        },
+        {
+          text: this.translate.instant('AUTH.LOGOUT'),
+          handler: () => {
+            this.authService.logout();
+            this.router.navigate(['/auth/login']);
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   async ngOnInit() {

@@ -199,6 +199,45 @@ testem.log
 libpeerconnection.log
 
 # ----------------------------
+# .NET Core / Visual Studio
+# ----------------------------
+# Build results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# NuGet
+*.nupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+
+# ASP.NET
+ScaffoldingReadMe.txt
+
+# Entity Framework
+*.db
+*.db-shm
+*.db-wal
+
+# User-specific files (sensitive)
+appsettings.Development.json
+appsettings.Local.json
+
+# ----------------------------
 # Misc
 # ----------------------------
 *.bak

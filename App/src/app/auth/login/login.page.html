@@ -1,0 +1,76 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>{{ 'AUTH.LOGIN' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="login-container">
+    <div class="logo-section">
+      <h1>THE BTN</h1>
+      <p>{{ 'AUTH.WELCOME_BACK' | translate }}</p>
+    </div>
+
+    <ion-card>
+      <ion-card-content>
+        <form (ngSubmit)="onLogin()">
+          <ion-item>
+            <ion-icon name="mail" slot="start"></ion-icon>
+            <ion-input
+              type="email"
+              [(ngModel)]="email"
+              name="email"
+              [label]="'AUTH.EMAIL' | translate"
+              labelPlacement="floating"
+              required
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-icon name="lock-closed" slot="start"></ion-icon>
+            <ion-input
+              type="password"
+              [(ngModel)]="password"
+              name="password"
+              [label]="'AUTH.PASSWORD' | translate"
+              labelPlacement="floating"
+              required
+            ></ion-input>
+          </ion-item>
+
+          @if (errorMessage) {
+            <ion-text color="danger">
+              <p class="error-message">{{ errorMessage }}</p>
+            </ion-text>
+          }
+
+          <ion-button 
+            expand="block" 
+            type="submit" 
+            [disabled]="isLoading || !email || !password"
+            class="login-button"
+          >
+            @if (isLoading) {
+              <ion-spinner name="crescent"></ion-spinner>
+              {{ 'AUTH.LOGGING_IN' | translate }}
+            } @else {
+              <ion-icon name="log-in" slot="start"></ion-icon>
+              {{ 'AUTH.LOGIN' | translate }}
+            }
+          </ion-button>
+        </form>
+
+        <div class="forgot-password">
+          <a routerLink="/forgot-password">{{ 'AUTH.FORGOT_PASSWORD' | translate }}</a>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="register-link">
+      <p>{{ 'AUTH.NO_ACCOUNT' | translate }}</p>
+      <ion-button fill="outline" routerLink="/auth/register">
+        {{ 'AUTH.CREATE_ACCOUNT' | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

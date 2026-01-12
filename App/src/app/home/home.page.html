@@ -8,6 +8,9 @@
       <ion-button (click)="selectLanguage()">
         <span class="lang-flag">{{ getCurrentLanguageFlag() }}</span>
       </ion-button>
+      <ion-button (click)="logout()">
+        <ion-icon name="logOut" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

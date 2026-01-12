@@ -1,0 +1,6 @@
+@TheBtnApi_HostAddress = http://localhost:5197
+
+GET {{TheBtnApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

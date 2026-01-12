@@ -42,5 +42,29 @@
   },
   "LANGUAGE": {
     "SELECT": "Välj språk"
+  },
+  "AUTH": {
+    "LOGIN": "Logga in",
+    "REGISTER": "Skapa konto",
+    "LOGOUT": "Logga ut",
+    "EMAIL": "E-postadress",
+    "PASSWORD": "Lösenord",
+    "CONFIRM_PASSWORD": "Bekräfta lösenord",
+    "FIRST_NAME": "Förnamn",
+    "LAST_NAME": "Efternamn",
+    "FORGOT_PASSWORD": "Glömt lösenord?",
+    "NO_ACCOUNT": "Har du inget konto?",
+    "HAVE_ACCOUNT": "Har du redan ett konto?",
+    "CREATE_ACCOUNT": "Skapa konto",
+    "LOGGING_IN": "Loggar in...",
+    "REGISTERING": "Skapar konto...",
+    "RESEND_VERIFICATION": "Skicka verifieringsmail igen",
+    "VERIFICATION_SENT": "Verifieringsmail skickat!",
+    "CHECK_EMAIL": "Kolla din e-post för att verifiera ditt konto.",
+    "LOGIN_SUCCESS": "Inloggning lyckades!",
+    "PASSWORDS_MISMATCH": "Lösenorden matchar inte",
+    "WELCOME_BACK": "Välkommen tillbaka!",
+    "CREATE_YOUR_ACCOUNT": "Skapa ditt konto",
+    "LOGOUT_CONFIRM": "Är du säker på att du vill logga ut?"
   }
 }
