@@ -15,6 +15,12 @@ const config: CapacitorConfig = {
         availableDevices: 'Available Devices',
         noDeviceFound: 'No Quiz Master found'
       }
+    },
+    CapacitorHttp: {
+      enabled: false  // Disabled to allow proxy to work during development
+    },
+    CapacitorCookies: {
+      enabled: true
     }
   }
 };

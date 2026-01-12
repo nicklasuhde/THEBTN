@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Logging;
 using TheBtnApi.Data;
 using TheBtnApi.Models;
 using TheBtnApi.Services;
@@ -62,22 +63,38 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
+builder.Services.AddHttpContextAccessor();
+
 // Add Controllers
 builder.Services.AddControllers();
 
-// Add CORS
-builder.Services.AddCors(options =>
+// Add CORS - Allow all origins in development for mobile app testing
+if (builder.Environment.IsDevelopment())
 {
-    options.AddPolicy("AllowApp", policy =>
+    IdentityModelEventSource.ShowPII = true;
+    builder.Services.AddCors(options =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        options.AddDefaultPolicy(policy =>
+        {
+            policy.AllowCredentials()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .SetIsOriginAllowed(_ => true); // Allow any origin in development
+        });
     });
-});
-
-// Add OpenAPI/Swagger
-builder.Services.AddOpenApi();
+}
+else
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("Production", policy =>
+        {
+            policy.WithOrigins("https://your-production-domain.com")
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+    });
+}
 
 var app = builder.Build();
 
@@ -94,10 +111,12 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseCors(); // Use default policy
 }
-
-app.UseCors("AllowApp");
+else
+{
+    app.UseCors("Production");
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
