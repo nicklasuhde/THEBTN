@@ -28,6 +28,10 @@ public:
   bool otaRequested();
   void startOTA();
 
+  // Check if a button press was received from a client
+  bool hasButtonPress();
+  uint8_t getLastButtonId();
+
 private:
   static void onReceive(const esp_now_recv_info_t* info,
   const uint8_t* data,
@@ -35,6 +39,8 @@ private:
 
   static unsigned long _lastMasterSeen;
   static bool _otaFlag;
+  static bool _buttonPressReceived;
+  static uint8_t _lastButtonId;
 };
 
 extern EspNowManager EspNow;

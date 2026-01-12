@@ -4,6 +4,8 @@
 EspNowManager EspNow;
 unsigned long EspNowManager::_lastMasterSeen = 0;
 bool EspNowManager::_otaFlag = false;
+bool EspNowManager::_buttonPressReceived = false;
+uint8_t EspNowManager::_lastButtonId = 0;
 
 void EspNowManager::begin() {
   WiFi.mode(WIFI_STA);
@@ -41,12 +43,31 @@ void EspNowManager::onReceive(const esp_now_recv_info_t* info,
   memcpy(&msg, data, sizeof(msg));
 
   if (msg.type == MSG_MASTER) {
-  _lastMasterSeen = millis();
+    _lastMasterSeen = millis();
+  }
+
+  if (msg.type == MSG_BUTTON) {
+    _buttonPressReceived = true;
+    _lastButtonId = msg.sender;
+    Serial.print("ESP-NOW: Button press received from client ");
+    Serial.println(msg.sender);
   }
 
   if (msg.type == MSG_PREPARE_OTA) {
-  _otaFlag = true;
+    _otaFlag = true;
   }
+}
+
+bool EspNowManager::hasButtonPress() {
+  if (_buttonPressReceived) {
+    _buttonPressReceived = false;
+    return true;
+  }
+  return false;
+}
+
+uint8_t EspNowManager::getLastButtonId() {
+  return _lastButtonId;
 }
 
 bool EspNowManager::masterDetected() {

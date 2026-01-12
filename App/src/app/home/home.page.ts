@@ -88,10 +88,32 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    await this.initializeBle();
+  }
+
+  async initializeBle() {
     try {
       await this.bleService.initialize();
-    } catch (error) {
-      await this.showAlert('BLE Error', 'Failed to initialize Bluetooth. Make sure Bluetooth is enabled.');
+      await this.showToast('Bluetooth ready');
+    } catch (error: any) {
+      console.error('BLE init error:', error);
+      const alert = await this.alertController.create({
+        header: 'Bluetooth Error',
+        message: 'Could not initialize Bluetooth. Please make sure Bluetooth is enabled and permissions are granted.',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel'
+          },
+          {
+            text: 'Try Again',
+            handler: () => {
+              this.initializeBle();
+            }
+          }
+        ]
+      });
+      await alert.present();
     }
   }
 

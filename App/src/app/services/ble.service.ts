@@ -24,8 +24,19 @@ export class BleService {
 
   async initialize(): Promise<void> {
     try {
-      await BleClient.initialize();
+      // Initialize BLE (this requests permissions on Android)
+      await BleClient.initialize({ androidNeverForLocation: true });
       console.log('BLE initialized successfully');
+
+      // Check if Bluetooth is enabled
+      const isEnabled = await BleClient.isEnabled();
+      console.log('Bluetooth enabled:', isEnabled);
+
+      if (!isEnabled) {
+        // Prompt user to enable Bluetooth
+        console.log('Requesting user to enable Bluetooth...');
+        await BleClient.requestEnable();
+      }
     } catch (error) {
       console.error('BLE initialization failed:', error);
       throw error;
@@ -34,12 +45,12 @@ export class BleService {
 
   async requestPermissions(): Promise<boolean> {
     try {
-      // Request Bluetooth permissions (needed for Android)
-      await BleClient.requestLEScan({ services: [] }, () => {});
-      await BleClient.stopLEScan();
-      return true;
+      // Permissions are now handled in initialize()
+      // This method can be used to re-check permissions if needed
+      const isEnabled = await BleClient.isEnabled();
+      return isEnabled;
     } catch (error) {
-      console.error('Permission request failed:', error);
+      console.error('Permission check failed:', error);
       return false;
     }
   }
