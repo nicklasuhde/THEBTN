@@ -1,17 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
-    <ion-title>
-      <ion-icon name="gameController" class="title-icon"></ion-icon>
-      {{ 'APP.TITLE' | translate }}
-    </ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="selectLanguage()">
-        <span class="lang-flag">{{ getCurrentLanguageFlag() }}</span>
-      </ion-button>
-      <ion-button (click)="logout()">
-        <ion-icon name="logOut" slot="icon-only"></ion-icon>
-      </ion-button>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
     </ion-buttons>
+    <ion-title>{{ 'MENU.PLAY' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 

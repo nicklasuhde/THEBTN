@@ -1,0 +1,55 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{ 'MENU.CREATE_GAME' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="game-controller-outline"></ion-icon>
+        {{ 'CREATE_GAME.NEW_GAME' | translate }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-input 
+            [(ngModel)]="gameName"
+            [label]="('CREATE_GAME.GAME_NAME' | translate)"
+            labelPlacement="floating"
+            [placeholder]="('CREATE_GAME.GAME_NAME_PLACEHOLDER' | translate)"
+          ></ion-input>
+        </ion-item>
+      </ion-list>
+
+      <ion-button expand="block" (click)="createGame()" [disabled]="!gameName.trim()">
+        <ion-icon name="play-outline" slot="start"></ion-icon>
+        {{ 'CREATE_GAME.START' | translate }}
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="info-card">
+    <ion-card-content>
+      <div class="info-item">
+        <ion-icon name="people-outline" color="primary"></ion-icon>
+        <div>
+          <h3>{{ 'CREATE_GAME.INFO.PLAYERS_TITLE' | translate }}</h3>
+          <p>{{ 'CREATE_GAME.INFO.PLAYERS_DESC' | translate }}</p>
+        </div>
+      </div>
+      <div class="info-item">
+        <ion-icon name="game-controller-outline" color="primary"></ion-icon>
+        <div>
+          <h3>{{ 'CREATE_GAME.INFO.BUTTONS_TITLE' | translate }}</h3>
+          <p>{{ 'CREATE_GAME.INFO.BUTTONS_DESC' | translate }}</p>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

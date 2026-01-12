@@ -3,8 +3,18 @@ import { authGuard, publicGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
-    path: 'home',
+    path: 'play',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'create-game',
+    loadComponent: () => import('./create-game/create-game.page').then((m) => m.CreateGamePage),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'settings',
+    loadComponent: () => import('./settings/settings.page').then((m) => m.SettingsPage),
     canActivate: [authGuard]
   },
   {
@@ -19,11 +29,16 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'play',
+    pathMatch: 'full'
+  },
+  {
+    path: 'home',
+    redirectTo: 'play',
     pathMatch: 'full'
   },
   {
     path: '**',
-    redirectTo: 'home'
+    redirectTo: 'play'
   }
 ];

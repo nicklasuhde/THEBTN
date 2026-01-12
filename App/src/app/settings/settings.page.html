@@ -1,0 +1,43 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{ 'MENU.SETTINGS' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-list>
+    <ion-item button (click)="selectLanguage()">
+      <ion-icon name="language-outline" slot="start" color="primary"></ion-icon>
+      <ion-label>
+        <h2>{{ 'SETTINGS.LANGUAGE' | translate }}</h2>
+        <p>{{ getCurrentLanguageLabel() }}</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
+      <ion-label>
+        <h2>{{ 'SETTINGS.ACCOUNT' | translate }}</h2>
+        <p>{{ getUserEmail() }}</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item button>
+      <ion-icon name="information-circle-outline" slot="start" color="primary"></ion-icon>
+      <ion-label>
+        <h2>{{ 'SETTINGS.ABOUT' | translate }}</h2>
+        <p>{{ 'SETTINGS.VERSION' | translate }} 1.0.0</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list class="logout-section">
+    <ion-item button (click)="logout()" detail="false">
+      <ion-icon name="log-out-outline" slot="start" color="danger"></ion-icon>
+      <ion-label color="danger">{{ 'AUTH.LOGOUT' | translate }}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

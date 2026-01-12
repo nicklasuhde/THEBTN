@@ -2,6 +2,11 @@
   "APP": {
     "TITLE": "THE BTN"
   },
+  "MENU": {
+    "PLAY": "Spela",
+    "CREATE_GAME": "Skapa spel",
+    "SETTINGS": "Inställningar"
+  },
   "BLUETOOTH": {
     "STATUS": "Bluetooth-status",
     "CONNECTED": "Ansluten till",
@@ -66,5 +71,23 @@
     "WELCOME_BACK": "Välkommen tillbaka!",
     "CREATE_YOUR_ACCOUNT": "Skapa ditt konto",
     "LOGOUT_CONFIRM": "Är du säker på att du vill logga ut?"
+  },
+  "SETTINGS": {
+    "LANGUAGE": "Språk",
+    "ACCOUNT": "Konto",
+    "ABOUT": "Om appen",
+    "VERSION": "Version"
+  },
+  "CREATE_GAME": {
+    "NEW_GAME": "Nytt spel",
+    "GAME_NAME": "Spelnamn",
+    "GAME_NAME_PLACEHOLDER": "Ange ett namn för ditt spel",
+    "START": "Starta spel",
+    "INFO": {
+      "PLAYERS_TITLE": "Lägg till spelare",
+      "PLAYERS_DESC": "Anslut quizknappar och tilldela dem till spelare",
+      "BUTTONS_TITLE": "Quizknappar",
+      "BUTTONS_DESC": "Varje knapp registreras när den trycks under spelet"
+    }
   }
 }

@@ -1,0 +1,18 @@
+ion-list {
+  background: transparent;
+  margin-bottom: 1rem;
+
+  ion-item {
+    --background: var(--ion-card-background);
+    --border-radius: 12px;
+    margin-bottom: 8px;
+
+    ion-icon {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.logout-section {
+  margin-top: 2rem;
+}

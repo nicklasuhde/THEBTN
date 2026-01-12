@@ -7,6 +7,7 @@ import {
   IonContent,
   IonButton,
   IonButtons,
+  IonMenuButton,
   IonList,
   IonItem,
   IonLabel,
@@ -21,8 +22,7 @@ import {
   IonRefresher,
   IonRefresherContent,
   AlertController,
-  ToastController,
-  ActionSheetController
+  ToastController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -33,16 +33,10 @@ import {
   checkmarkCircle,
   closeCircle,
   trash,
-  refreshOutline,
-  gameController,
-  globe,
-  language,
-  logOut
+  refreshOutline
 } from 'ionicons/icons';
-import { Router } from '@angular/router';
 import { BleDevice } from '@capacitor-community/bluetooth-le';
 import { BleService, ButtonPressEvent } from '../services/ble.service';
-import { AuthService } from '../services/auth.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -58,6 +52,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
     IonContent,
     IonButton,
     IonButtons,
+    IonMenuButton,
     IonList,
     IonItem,
     IonLabel,
@@ -81,83 +76,20 @@ export class HomePage implements OnInit, OnDestroy {
 
   constructor(
     private bleService: BleService,
-    private authService: AuthService,
-    private router: Router,
     private alertController: AlertController,
     private toastController: ToastController,
-    private actionSheetController: ActionSheetController,
     private translate: TranslateService
   ) {
     addIcons({
       bluetooth,
       bluetoothOutline,
       search,
-      logOut,
       flash,
       checkmarkCircle,
       closeCircle,
       trash,
-      refreshOutline,
-      gameController,
-      globe,
-      language
+      refreshOutline
     });
-  }
-
-  async selectLanguage() {
-    const currentLang = this.translate.currentLang;
-    
-    const actionSheet = await this.actionSheetController.create({
-      header: this.translate.instant('LANGUAGE.SELECT'),
-      buttons: [
-        {
-          text: '🇸🇪 Svenska',
-          role: currentLang === 'sv' ? 'selected' : undefined,
-          handler: () => {
-            this.translate.use('sv');
-          }
-        },
-        {
-          text: '🇬🇧 English',
-          role: currentLang === 'en' ? 'selected' : undefined,
-          handler: () => {
-            this.translate.use('en');
-          }
-        },
-        {
-          text: this.translate.instant('ACTIONS.CANCEL'),
-          role: 'cancel'
-        }
-      ]
-    });
-    
-    await actionSheet.present();
-  }
-
-  getCurrentLanguageFlag(): string {
-    const lang = this.translate.currentLang || 'sv';
-    return lang === 'sv' ? '🇸🇪' : '🇬🇧';
-  }
-
-  async logout() {
-    const alert = await this.alertController.create({
-      header: this.translate.instant('AUTH.LOGOUT'),
-      message: this.translate.instant('AUTH.LOGOUT_CONFIRM') || 'Are you sure you want to log out?',
-      buttons: [
-        {
-          text: this.translate.instant('ACTIONS.CANCEL'),
-          role: 'cancel'
-        },
-        {
-          text: this.translate.instant('AUTH.LOGOUT'),
-          handler: () => {
-            this.authService.logout();
-            this.router.navigate(['/auth/login']);
-          }
-        }
-      ]
-    });
-    await alert.present();
   }
 
   async ngOnInit() {

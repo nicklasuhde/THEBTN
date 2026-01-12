@@ -2,6 +2,11 @@
   "APP": {
     "TITLE": "THE BTN"
   },
+  "MENU": {
+    "PLAY": "Play",
+    "CREATE_GAME": "Create Game",
+    "SETTINGS": "Settings"
+  },
   "BLUETOOTH": {
     "STATUS": "Bluetooth Status",
     "CONNECTED": "Connected to",
@@ -66,5 +71,23 @@
     "WELCOME_BACK": "Welcome back!",
     "CREATE_YOUR_ACCOUNT": "Create your account",
     "LOGOUT_CONFIRM": "Are you sure you want to log out?"
+  },
+  "SETTINGS": {
+    "LANGUAGE": "Language",
+    "ACCOUNT": "Account",
+    "ABOUT": "About",
+    "VERSION": "Version"
+  },
+  "CREATE_GAME": {
+    "NEW_GAME": "New Game",
+    "GAME_NAME": "Game name",
+    "GAME_NAME_PLACEHOLDER": "Enter a name for your game",
+    "START": "Start Game",
+    "INFO": {
+      "PLAYERS_TITLE": "Add Players",
+      "PLAYERS_DESC": "Connect quiz buttons and assign them to players",
+      "BUTTONS_TITLE": "Quiz Buttons",
+      "BUTTONS_DESC": "Each button will register when pressed during gameplay"
+    }
   }
 }

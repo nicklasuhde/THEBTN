@@ -1,0 +1,25 @@
+ion-menu {
+  ion-list {
+    padding-top: 1rem;
+
+    ion-item {
+      --padding-start: 1rem;
+      margin-bottom: 0.25rem;
+
+      ion-icon {
+        margin-right: 0.75rem;
+        font-size: 1.4rem;
+      }
+    }
+
+    .active-link {
+      --background: var(--ion-color-primary-tint);
+      --color: var(--ion-color-primary);
+      font-weight: 600;
+
+      ion-icon {
+        color: var(--ion-color-primary);
+      }
+    }
+  }
+}
